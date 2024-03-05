@@ -109,8 +109,19 @@ export EDITOR="nvim"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# alias for neovim
+alias v="nvim"
 alias vi="nvim"
 alias vim="nvim"
+
+# alias for git
+alias gi="git init"
+alias ga="git add"
+alias gs="git status"
+alias gc="git commit"
+alias gp="git pull"
+alias gP="git push"
+alias gw="git worktree"
 
 # fnm node version manager
 eval "$(fnm env --use-on-cd)"

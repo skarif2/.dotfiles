@@ -123,6 +123,10 @@ alias gp="git pull"
 alias gP="git push"
 alias gw="git worktree"
 
+# alias for lazygit
+alias lg="lazygit"
+alias lgit="lazygit"
+
 # fnm node version manager
 eval "$(fnm env --use-on-cd)"
 

@@ -1,0 +1,3 @@
+# qBittorrent in .config folder
+./.config/qBittorrent/qBittorrent.ini
+./.config/qBittorrent/qBittorrent-data.ini

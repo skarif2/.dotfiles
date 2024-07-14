@@ -1,7 +1,9 @@
 return {
-  { "folke/noice.nvim", enabled = false },
-  { "rcarriga/nvim-notify", enabled = false },
+  -- Editor
   { "RRethy/vim-illuminate", enabled = false },
-  { "stevearc/dressing.nvim", enabled = false },
+
+  -- UI
+  { "rcarriga/nvim-notify", enabled = false },
   { "echasnovski/mini.indentscope", enabled = false },
+  { "echasnovski/mini.animate", enabled = false },
 }

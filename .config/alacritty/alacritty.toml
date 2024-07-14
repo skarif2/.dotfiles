@@ -1,5 +1,5 @@
 import = [
-  "~/.config/alacritty/catppuccin-macchiato.toml"
+  "~/.config/alacritty/tokyo-night.toml"
 ]
 
 live_config_reload = true
@@ -13,5 +13,5 @@ dynamic_padding = true
 decorations = "Buttonless"
 
 [font]
-normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+normal = { family = "FiraCode Nerd Font", style = "Regular" }
 size = 16

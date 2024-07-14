@@ -121,11 +121,24 @@ alias gs="git status"
 alias gc="git commit"
 alias gp="git pull"
 alias gP="git push"
-alias gw="git worktree"
 
 # alias for lazygit
 alias lg="lazygit"
 alias lgit="lazygit"
+
+function gw() {
+  case "$1" in
+    clone)
+      source ~/.scripts/clone-for-worktree.sh "${@:2}"
+      ;;
+    df)
+      source ~/.scripts/dina/frontend-worktree-add.sh "${@:2}"
+      ;;
+    *)
+      git worktree "${@:1}"
+      ;;
+  esac
+}
 
 # fnm node version manager
 eval "$(fnm env --use-on-cd)"

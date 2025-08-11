@@ -81,6 +81,7 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
+source <(fzf --zsh)
 
 # User configuration
 
@@ -145,3 +146,31 @@ eval "$(fnm env --use-on-cd)"
 
 # Star Ship
 eval "$(starship init zsh)"
+
+dina() {
+	case "$1" in
+	clean)
+		rm -r node_modules
+		yarn install --silent --frozen-lockfile --development
+		;;
+	restart)
+		yarn install --silent --frozen-lockfile --development
+		;;
+	start) ;; # No setup needed, just run yarn dev
+	*)
+		echo "Usage: dina {clean|restart|start}"
+		return 1
+		;;
+	esac
+
+	yarn dev "${@:2}"
+}
+
+export NODE_OPTIONS="--max-old-space-size=8192"
+
+# Created by `pipx` on 2025-05-02 08:32:19
+export PATH="$PATH:/Users/skarif/.local/bin"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

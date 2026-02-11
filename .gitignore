@@ -1,3 +1,8 @@
-# qBittorrent in .config folder
-./.config/qBittorrent/qBittorrent.ini
-./.config/qBittorrent/qBittorrent-data.ini
+# tmux plugins
+tmux/.config/tmux/plugins
+
+# nushell history (catches history.txt, history.sqlite3.db, etc.)
+nushell/.config/nushell/history*
+
+# macos files
+.DS_Store

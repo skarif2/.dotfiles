@@ -1,0 +1,217 @@
+# Starship Configuration: Tokyo Night Theme
+# Updated to match "minimal, connector-style, two-line, Tokyo Night" request
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Format of the prompt
+format = """
+[╭─ ](bold green)$username$hostname$directory$git_branch$git_commit$git_state$package\
+$nodejs$rust$python$golang$terraform$nix_shell$docker_context$line_break\
+[╰─ ](bold green)"""
+
+# Right-side prompt format
+right_format = """$git_metrics$git_status$aws$cmd_duration$time"""
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+# Timeout for commands executed by starship (in milliseconds)
+command_timeout = 1000
+
+
+# ============================================================================
+# Tokyo Night Palette
+# ============================================================================
+palette = "tokyo_night"
+
+[palettes.tokyo_night]
+foreground = "#c0caf5"
+selection = "#33467c"
+comment = "#565f89"
+red = "#f7768e"
+orange = "#ff9e64"
+yellow = "#e0af68"
+green = "#9ece6a"
+purple = "#9d7cd8"
+cyan = "#7dcfff"
+blue = "#7aa2f7"
+magenta = "#bb9af7"
+
+# ============================================================================
+# Git Configuration
+# ============================================================================
+
+[git_metrics]
+added_style = "bold green"
+deleted_style = "bold red"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+disabled = false
+only_nonzero_diffs = false
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "bold red"
+conflicted = "[🏳${count}](bold red) "
+ahead = "[⇡${count}](bold cyan) "
+behind = "[⇣${count}](bold yellow) "
+diverged = "[⇕⇡${ahead_count}⇣${behind_count}](bold magenta) "
+up_to_date = "[✓](bold green)"
+untracked = "[?${count}](bold blue) "
+stashed = '[\$${count}](bold cyan) '
+modified = "[!${count}](bold yellow) "
+staged = "[+${count}](bold green) "
+renamed = "[»${count}](bold purple) "
+deleted = "[✘${count}](bold red) "
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bold yellow"
+
+# ============================================================================
+# Time & Duration
+# ============================================================================
+
+[time]
+disabled = false
+format = 'at [$time]($style) '
+style = "bold white"
+time_format = "%T"
+utc_time_offset = "+6"
+
+[cmd_duration]
+min_time = 500
+format = "[took](bold white) [$duration]($style) "
+style = "bold yellow"
+
+# ============================================================================
+# Language & Tool Versions
+# ============================================================================
+
+[aws]
+format = '[$symbol(profile: "$profile" )(\(region: $region\) )]($style)'
+disabled = false
+style = 'bold blue'
+symbol = " "
+
+[bun]
+symbol = " "
+
+[c]
+symbol = " "
+
+[cpp]
+symbol = " "
+
+[cmake]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[deno]
+symbol = " "
+
+[directory]
+read_only = " 󰌾"
+
+[docker_context]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[gcloud]
+symbol = " "
+
+[git_branch]
+symbol = " "
+
+[git_commit]
+tag_symbol = '  '
+
+[golang]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[hostname]
+ssh_symbol = " "
+
+[lua]
+symbol = " "
+
+[memory_usage]
+symbol = "󰍛 "
+
+[meson]
+symbol = "󰔷 "
+
+[nodejs]
+symbol = " "
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+AOSC = " "
+Arch = " "
+Artix = " "
+CachyOS = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Elementary = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Ios = "󰀷 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+Nobara = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
+Zorin = " "
+
+[package]
+symbol = "󰏗 "
+
+[python]
+symbol = " "
+
+[rust]
+symbol = "󱘗 "
+
+[status]
+symbol = " "

@@ -125,8 +125,6 @@ def lla [] {
     ls -la
 }
 
-
-
 $env.PROMPT_INDICATOR = $"((ansi green_bold)❯(ansi reset)) "
 $env.PROMPT_INDICATOR_VI_INSERT = $"((ansi green_bold)❯(ansi reset)) "
 $env.PROMPT_INDICATOR_VI_NORMAL = $"((ansi purple_bold)❮(ansi reset)) "

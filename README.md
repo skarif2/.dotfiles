@@ -1,8 +1,8 @@
-# 🚀 Dotfiles
+# .dotfiles
 
 Modern, cross-platform development environment configuration managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
-## 📦 What's Included
+## 📦 What's Inside
 
 ### Shell & Prompt
 - **[Nushell](https://www.nushell.sh/)** — Modern shell with structured data pipelines, built-in completions, and vi mode
@@ -27,9 +27,11 @@ Modern, cross-platform development environment configuration managed with [GNU S
 
 ## 🎯 Why These Tools?
 
+*Because life's too short for slow shells and janky version managers.*
+
 ### Nushell over Bash/Zsh
-- **Structured data**: Commands output tables, not text — pipe JSON, CSV, etc. natively
-- **Better errors**: Clear error messages with suggestions
+- **Structured data**: Commands output tables, not text — pipe JSON, CSV, etc. natively (no more `awk '{print $2}'` nightmares)
+- **Better errors**: Clear error messages with suggestions (instead of "command not found" and a shrug)
 - **Cross-platform**: Same syntax on macOS, Linux, and Windows
 - **Modern defaults**: Vi mode, fuzzy completions, and syntax highlighting built-in
 
@@ -40,9 +42,9 @@ Modern, cross-platform development environment configuration managed with [GNU S
 - **Shell-agnostic**: Works identically in any shell
 
 ### Starship over oh-my-zsh themes
-- **Performance**: Written in Rust, renders in milliseconds
+- **Performance**: Written in Rust, renders in milliseconds (your prompt won't lag behind your typing)
 - **Universal**: Same prompt in Nushell, Zsh, Bash, Fish, PowerShell
-- **Minimal by default**: Shows only relevant context (git status, Node version, etc.)
+- **Minimal by default**: Shows only relevant context (git status, Node version, etc.) — no ASCII art locomotives
 
 ## 🛠️ Installation
 
@@ -105,7 +107,7 @@ Clones [TPM](https://github.com/tmux-plugins/tpm) to `~/.config/tmux/plugins/tpm
 
 ### Post-Installation
 
-1. **Restart your shell** or open a new terminal
+1. **Restart your shell** or open a new terminal (the classic "turn it off and on again")
 2. **Install Node.js** via Volta:
    ```bash
    volta install node@22
@@ -158,7 +160,7 @@ cd ~/.dotfiles && stow myapp
 Now `~/.config/myapp/config.toml` is symlinked and version-controlled.
 
 ### 4. Remove Unwanted Tools
-Don't use Tmux? Just delete the directory:
+Don't use Tmux? No judgment. Just delete the directory:
 ```bash
 cd ~/.dotfiles
 stow -D tmux          # Remove symlinks
@@ -243,11 +245,12 @@ cd ~/.dotfiles
 git checkout -b backup-$(date +%Y%m%d)
 # Make changes...
 git add . && git commit -m "Experimental changes"
+# (Future you will thank present you)
 ```
 
 ## 🤝 Contributing
 
-Found a bug or have a suggestion? Open an issue or PR! This repo is meant to be a starting point — make it your own.
+Found a bug or have a suggestion? Open an issue or PR! This repo is meant to be a starting point — fork it, break it, make it yours. That's the whole point.
 
 ## 📝 License
 

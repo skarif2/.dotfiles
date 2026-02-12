@@ -1,16 +1,258 @@
-# .dotfiles
+# 🚀 Dotfiles
 
-- zsh
-- oh-my-zsh
-- starship
-- alacritty
-- tmux
-- yabai
-- skhd
-- nvim
-- stow
+Modern, cross-platform development environment configuration managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
-clone this repo into home direcotry ~/
+## 📦 What's Included
 
+### Shell & Prompt
+- **[Nushell](https://www.nushell.sh/)** — Modern shell with structured data pipelines, built-in completions, and vi mode
+- **[Starship](https://starship.rs/)** — Fast, minimal prompt with git status, language versions, and execution time
+- **[Carapace](https://carapace-sh.github.io/)** — Multi-shell completion engine with support for 1000+ commands
+
+### Terminal & Window Management
+- **[Ghostty](https://ghostty.org/)** — GPU-accelerated terminal emulator
+- **[Tmux](https://github.com/tmux/tmux)** — Terminal multiplexer for session management and split panes
+- **[AeroSpace](https://github.com/nikitabobko/AeroSpace)** — Tiling window manager for macOS (i3-like)
+
+### Development Tools
+- **[Neovim](https://neovim.io/)** — Hyperextensible Vim-based text editor
+- **[Volta](https://volta.sh/)** — Hassle-free Node.js version manager using shims (no shell hooks needed)
+- **[fzf](https://github.com/junegunn/fzf)** — Fuzzy finder for files, commands, and history
+- **[fd](https://github.com/sharkdp/fd)** — Fast, user-friendly alternative to `find`
+- **[ripgrep](https://github.com/BurntSushi/ripgrep)** — Blazing fast grep alternative
+
+### Custom Scripts
+- **Git worktree helpers** — Shortcuts for managing multiple working trees
+- **Project-specific utilities** — Custom workflows and automation
+
+## 🎯 Why These Tools?
+
+### Nushell over Bash/Zsh
+- **Structured data**: Commands output tables, not text — pipe JSON, CSV, etc. natively
+- **Better errors**: Clear error messages with suggestions
+- **Cross-platform**: Same syntax on macOS, Linux, and Windows
+- **Modern defaults**: Vi mode, fuzzy completions, and syntax highlighting built-in
+
+### Volta over fnm/nvm
+- **Zero configuration**: No shell hooks, no PATH manipulation on every `cd`
+- **Shim-based**: Automatically resolves the correct Node version at execution time
+- **Package.json aware**: Reads `engines.node` field for per-project versions
+- **Shell-agnostic**: Works identically in any shell
+
+### Starship over oh-my-zsh themes
+- **Performance**: Written in Rust, renders in milliseconds
+- **Universal**: Same prompt in Nushell, Zsh, Bash, Fish, PowerShell
+- **Minimal by default**: Shows only relevant context (git status, Node version, etc.)
+
+## 🛠️ Installation
+
+### Prerequisites
+- **macOS**: Homebrew installed ([brew.sh](https://brew.sh/))
+- **Linux**: Your distro's package manager (apt, dnf, pacman, etc.)
+
+### Quick Start
+
+```bash
+# 1. Clone this repo to your home directory
+cd ~
+git clone https://github.com/YOUR_USERNAME/.dotfiles.git
+
+# 2. Run the setup script
 cd .dotfiles
-stow .
+bash setup.sh
+```
+
+### What `setup.sh` Does
+
+The setup script automates the entire installation process:
+
+#### 1. **Platform Detection**
+Detects macOS or Linux and adjusts behavior accordingly.
+
+#### 2. **Tool Installation** (macOS only)
+On macOS, automatically installs all required tools via Homebrew:
+- CLI tools: `stow`, `nu`, `starship`, `carapace`, `nvim`, `tmux`, `fzf`, `fd`, `rg`
+- GUI apps: AeroSpace, Ghostty, Fira Code Nerd Font
+
+On Linux, it checks for missing tools and prompts you to install them manually using your package manager.
+
+#### 3. **Symlink Creation (Stow)**
+Uses GNU Stow to create symlinks from `~/.dotfiles/` to your home directory:
+```
+~/.dotfiles/nushell/.config/nushell/config.nu  →  ~/.config/nushell/config.nu
+~/.dotfiles/nvim/.config/nvim/init.lua         →  ~/.config/nvim/init.lua
+~/.dotfiles/tmux/.config/tmux/tmux.conf        →  ~/.config/tmux/tmux.conf
+...
+```
+
+This means:
+- ✅ Edit files in `~/.dotfiles/` and changes apply immediately
+- ✅ Easy to version control
+- ✅ Clean uninstall: `stow -D <package>` removes all symlinks
+
+#### 4. **macOS-Specific Fixes**
+On macOS, Nushell looks for config at `~/Library/Application Support/nushell/` by default, but we use `~/.config/nushell/` for cross-platform compatibility. The script creates a symlink to bridge this.
+
+#### 5. **Volta Installation**
+Installs [Volta](https://volta.sh/) using its official installer:
+```bash
+curl https://get.volta.sh | bash -s -- --skip-setup
+```
+The `--skip-setup` flag prevents it from modifying shell profiles (we handle PATH in our configs).
+
+#### 6. **Tmux Plugin Manager (TPM)**
+Clones [TPM](https://github.com/tmux-plugins/tpm) to `~/.config/tmux/plugins/tpm` for managing Tmux plugins.
+
+### Post-Installation
+
+1. **Restart your shell** or open a new terminal
+2. **Install Node.js** via Volta:
+   ```bash
+   volta install node@22
+   ```
+3. **Install Tmux plugins**: Press `Ctrl+Space` then `I` (capital i) inside Tmux
+
+## 🍴 Forking & Customization
+
+This repo is designed to be forked and personalized. Here's how:
+
+### 1. Fork the Repository
+Click "Fork" on GitHub, then clone your fork:
+```bash
+git clone https://github.com/YOUR_USERNAME/.dotfiles.git ~/.dotfiles
+```
+
+### 2. Customize Configs
+Each directory is a "stow package" containing config files:
+
+```
+.dotfiles/
+├── nushell/
+│   └── .config/nushell/
+│       ├── config.nu      # Aliases, functions, keybindings
+│       └── env.nu         # Environment variables, PATH
+├── nvim/
+│   └── .config/nvim/      # Your Neovim config
+├── starship/
+│   └── .config/starship/
+│       └── starship.toml  # Prompt customization
+├── tmux/
+│   └── .config/tmux/
+│       └── tmux.conf      # Tmux keybindings & plugins
+└── ...
+```
+
+**To customize**:
+- Edit files directly in `~/.dotfiles/<package>/.config/...`
+- Changes apply immediately (symlinks!)
+- Commit and push to your fork
+
+### 3. Add Your Own Packages
+Create a new directory for any tool:
+```bash
+mkdir -p ~/.dotfiles/myapp/.config/myapp
+echo "my_setting = true" > ~/.dotfiles/myapp/.config/myapp/config.toml
+cd ~/.dotfiles && stow myapp
+```
+
+Now `~/.config/myapp/config.toml` is symlinked and version-controlled.
+
+### 4. Remove Unwanted Tools
+Don't use Tmux? Just delete the directory:
+```bash
+cd ~/.dotfiles
+stow -D tmux          # Remove symlinks
+rm -rf tmux/          # Delete the package
+```
+
+Update `setup.sh` to remove it from `REQUIRED_CMDS` array.
+
+### 5. Platform-Specific Configs
+Use conditional logic in configs:
+
+**Nushell** (`env.nu`):
+```nu
+if (sys host | get name) == "Darwin" {
+    # macOS-specific PATH additions
+}
+```
+
+**Tmux** (`tmux.conf`):
+```bash
+if-shell "uname | grep -q Darwin" \
+    "set -g status-position top" \
+    "set -g status-position bottom"
+```
+
+## 📁 Repository Structure
+
+```
+.dotfiles/
+├── .gitignore           # Ignore history files, plugins, .DS_Store
+├── .stowrc              # Stow config (sets target to ~/)
+├── README.md            # This file
+├── setup.sh             # Automated installation script
+│
+├── aerospace/           # AeroSpace window manager (macOS)
+├── ghostty/             # Ghostty terminal config
+├── nushell/             # Nushell shell config
+├── nvim/                # Neovim editor config
+├── scripts/             # Custom shell scripts
+├── starship/            # Starship prompt config
+└── tmux/                # Tmux terminal multiplexer config
+```
+
+## 🐧 Linux Compatibility
+
+The setup script detects Linux and:
+- ✅ Checks for required tools
+- ✅ Stows all packages correctly
+- ✅ Installs Volta and TPM
+- ⚠️ **Does NOT auto-install tools** (lists what's missing)
+
+**Manual installation example (Ubuntu/Debian)**:
+```bash
+sudo apt update
+sudo apt install stow nushell neovim tmux fzf fd-find ripgrep
+```
+
+**Note**: Some package names differ by distro:
+- `fd` → `fd-find` on Debian/Ubuntu
+- Fonts install to `~/.local/share/fonts/` manually
+
+## 🔧 Maintenance
+
+### Update All Tools (macOS)
+```bash
+brew update && brew upgrade
+```
+
+### Update Tmux Plugins
+Press `Ctrl+Space` then `U` inside Tmux.
+
+### Sync Dotfiles Across Machines
+```bash
+cd ~/.dotfiles
+git pull                 # Pull latest changes
+bash setup.sh               # Re-run setup (idempotent)
+```
+
+### Backup Before Major Changes
+```bash
+cd ~/.dotfiles
+git checkout -b backup-$(date +%Y%m%d)
+# Make changes...
+git add . && git commit -m "Experimental changes"
+```
+
+## 🤝 Contributing
+
+Found a bug or have a suggestion? Open an issue or PR! This repo is meant to be a starting point — make it your own.
+
+## 📝 License
+
+MIT — do whatever you want with it.
+
+---
+
+**Happy hacking!** 🎉

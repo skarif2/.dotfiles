@@ -188,12 +188,12 @@ automatically-unhide-macos-hidden-apps = false
     A = '^built-in retina display$' 
     S = '^built-in retina display$' # discord
     D = '^built-in retina display$' # slack
-    F = '^built-in retina display$' # terminal (alacritty)
-    G = '^built-in retina display$'
+    F = '^built-in retina display$'
+    G = '^built-in retina display$'  # terminal (ghostty)
 
 [[on-window-detected]]
-  if.app-id = 'org.alacritty'
-  run = ['move-node-to-workspace A']
+  if.app-id = 'com.mitchellh.ghostty'
+  run = ['move-node-to-workspace G']
 
 [[on-window-detected]]
   if.app-id = 'com.tinyspeck.slackmacgap'

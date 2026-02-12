@@ -210,3 +210,15 @@ automatically-unhide-macos-hidden-apps = false
 [[on-window-detected]]
   if.app-id = 'com.microsoft.VSCode'
   run = ['move-node-to-workspace Q']
+
+[[on-window-detected]]
+  if.app-id = 'com.google.antigravity'
+  run = ['move-node-to-workspace Q']
+
+[[on-window-detected]]
+  if.app-id = 'dev.zed.Zed'
+  run = ['move-node-to-workspace T']
+
+[[on-window-detected]]
+  if.app-id = 'md.obsidian'
+  run = ['move-node-to-workspace A']

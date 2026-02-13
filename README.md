@@ -62,7 +62,22 @@ git clone https://github.com/YOUR_USERNAME/.dotfiles.git
 # 2. Run the setup script
 cd .dotfiles
 bash setup.sh
+
+# 3. GUI Applications Installation (optional)
+# After running `setup.sh`, you can install all GUI applications with one command:
+
+```bash
+cd ~/.dotfiles/apps
+bash install.sh
 ```
+
+This installs **19 applications** via Homebrew including:
+- Development tools (Antigravity, VS Code, Zed)
+- Browsers (Arc, Brave, Chrome, DuckDuckGo)
+- Productivity apps (Notion, Obsidian, Slack, Discord)
+- Utilities (Bitwarden, VLC, Ice, Sol, and more)
+
+See [`apps/README.md`](apps/README.md) for the complete list and manual installation instructions for apps not available via Homebrew.
 
 ### What `setup.sh` Does
 
@@ -194,6 +209,10 @@ if-shell "uname | grep -q Darwin" \
 ├── .stowrc              # Stow config (sets target to ~/)
 ├── README.md            # This file
 ├── setup.sh             # Automated installation script
+│
+├── apps/                # GUI application installation (not stowed)
+│   ├── install-apps.sh  # Install all apps via Homebrew
+│   └── README.md        # App list and installation guide
 │
 ├── aerospace/           # AeroSpace window manager (macOS)
 ├── ghostty/             # Ghostty terminal config

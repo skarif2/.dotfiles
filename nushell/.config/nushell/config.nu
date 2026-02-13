@@ -2,17 +2,15 @@
 source ~/.config/nushell/env.nu
 
 # ============================================================================
-# Aliases - Neovim
+# Aliases
 # ============================================================================
 
+# Neovim
 alias v = nvim
 alias vi = nvim
 alias vim = nvim
 
-# ============================================================================
-# Aliases - Git
-# ============================================================================
-
+# Git
 alias gi = git init
 alias ga = git add
 alias gs = git status
@@ -20,11 +18,13 @@ alias gc = git commit
 alias gp = git pull
 alias gP = git push
 
-# ============================================================================
-# Aliases - LazyGit
-# ============================================================================
-
+# LazyGit
 alias gg = lazygit
+
+# Dotfiles
+def dotfiles [] {
+    ^agy ~/.dotfiles
+}
 
 # ============================================================================
 # Nushell Configuration
@@ -125,9 +125,13 @@ def lla [] {
     ls -la
 }
 
-$env.PROMPT_INDICATOR = $"((ansi green_bold)❯(ansi reset)) "
-$env.PROMPT_INDICATOR_VI_INSERT = $"((ansi green_bold)❯(ansi reset)) "
-$env.PROMPT_INDICATOR_VI_NORMAL = $"((ansi purple_bold)❮(ansi reset)) "
+# $env.PROMPT_INDICATOR = $"((ansi green_bold)❯(ansi reset)) "
+# $env.PROMPT_INDICATOR_VI_INSERT = $"((ansi green_bold)❯(ansi reset)) "
+# $env.PROMPT_INDICATOR_VI_NORMAL = $"((ansi purple_bold)❮(ansi reset)) "
+
+$env.PROMPT_INDICATOR = ""
+$env.PROMPT_INDICATOR_VI_INSERT = ""
+$env.PROMPT_INDICATOR_VI_NORMAL = ""
 
 use ~/.cache/starship/init.nu
 source ~/.cache/carapace/init.nu

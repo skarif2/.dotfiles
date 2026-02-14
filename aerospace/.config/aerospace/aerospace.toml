@@ -191,17 +191,7 @@ automatically-unhide-macos-hidden-apps = false
     F = '^built-in retina display$'
     G = '^built-in retina display$'  # terminal (ghostty)
 
-[[on-window-detected]]
-  if.app-id = 'com.mitchellh.ghostty'
-  run = ['move-node-to-workspace G']
-
-[[on-window-detected]]
-  if.app-id = 'com.tinyspeck.slackmacgap'
-  run = ['move-node-to-workspace S']
-
-[[on-window-detected]]
-  if.app-id = 'com.hnc.Discord'
-  run = ['move-node-to-workspace D']
+# Primary monitor
 
 [[on-window-detected]]
   if.app-id = 'company.thebrowser.Browser'
@@ -219,6 +209,20 @@ automatically-unhide-macos-hidden-apps = false
   if.app-id = 'dev.zed.Zed'
   run = ['move-node-to-workspace T']
 
+# Secondary monitor
+
+[[on-window-detected]]
+  if.app-id = 'com.mitchellh.ghostty'
+  run = ['move-node-to-workspace A']
+
+[[on-window-detected]]
+  if.app-id = 'com.tinyspeck.slackmacgap'
+  run = ['move-node-to-workspace S']
+
+[[on-window-detected]]
+  if.app-id = 'com.hnc.Discord'
+  run = ['move-node-to-workspace D']
+
 [[on-window-detected]]
   if.app-id = 'md.obsidian'
-  run = ['move-node-to-workspace A']
+  run = ['move-node-to-workspace G']

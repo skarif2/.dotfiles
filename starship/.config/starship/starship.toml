@@ -34,10 +34,10 @@ magenta = "#bb9af7"
 # ============================================================================
 
 [git_branch]
-format = "[ $branch]($style)"
+format = "([ $branch]($style) )"
 
 [git_status]
-format = '([ $ahead_behind$modified]($style) )'
+format = '([$ahead_behind$modified]($style) )'
 style = "cyan"
 # Show single * for any changes
 modified = "*"

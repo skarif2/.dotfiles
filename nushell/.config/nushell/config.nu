@@ -65,24 +65,15 @@ $env.config = {
 # Custom Functions
 # ============================================================================
 
-# Git worktree wrapper function
-# Usage: gw clone <repo> | gw df <branch> | gw <any-git-worktree-command>
-def gw [command?: string, ...args] {
-    match $command {
-        "clone" => { 
-            bash ~/.scripts/clone-for-worktree.sh ...$args 
-        }
-        "df" => { 
-            bash ~/.scripts/dina/frontend-worktree-add.sh ...$args 
-        }
-        null => {
-            git worktree
-        }
-        _ => { 
-            git worktree $command ...$args 
-        }
-    }
-}
+use ~/.dotfiles/scripts/.scripts/dina-frontend.nu
+use ~/.dotfiles/scripts/.scripts/clone-worktree.nu
+
+# Standard git worktree (passes all flags correctly)
+alias gw = git worktree
+
+# Custom worktree tools
+alias gwf = dina-frontend worktree-add
+alias gwc = clone-worktree clone
 
 # ============================================================================
 # FZF Integration (Optional)

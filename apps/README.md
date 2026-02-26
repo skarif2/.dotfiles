@@ -7,8 +7,7 @@ This directory contains scripts and documentation for installing GUI application
 Install all applications with one command:
 
 ```bash
-cd ~/.dotfiles/apps
-bash install.sh
+bash ~/.dotfiles/apps/install.sh
 ```
 
 ## What Gets Installed
@@ -16,38 +15,50 @@ bash install.sh
 The script installs **19 applications** via Homebrew:
 
 ### Development Tools (3)
+
 - **Antigravity** - AI-powered code editor
 - **Visual Studio Code** - Code editor
 - **Zed** - Modern code editor
 
 ### Browsers (4)
+
 - **Arc** - Modern web browser
 - **Brave Browser** - Privacy-focused browser
 - **Google Chrome** - Web browser
 - **DuckDuckGo** - Privacy-focused browser
 
 ### Productivity & Notes (2)
+
 - **Notion** - Workspace and notes
 - **Obsidian** - Knowledge management
 
 ### Communication (2)
+
 - **Slack** - Team communication
 - **Discord** - Community chat
 
 ### Security & Privacy (2)
+
 - **Bitwarden** - Password manager
 - **Cloudflare WARP** - VPN/network security
 
 ### Media (1)
+
 - **VLC** - Media player
 
 ### Utilities & System Tools (4)
+
 - **Alcove** - Window management/productivity
 - **Ice** - Menu bar management
 - **Onyx** - System maintenance
 - **Sol** - macOS launcher
 
 ## Manual Installation Required
+
+The following apps are **not available via Homebrew** and must be installed manually:
+
+**Amphetamine** - Keep-awake utility  
+📥 Download from: [Mac App Store](https://apps.apple.com/app/amphetamine/id937984704)
 
 **Second Clock** - Time zone clock  
 📥 Download from: [Mac App Store](https://apps.apple.com/app/second-clock/id6450279539)

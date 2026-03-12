@@ -11,12 +11,12 @@ echo "📦 Setting up dotfiles from $DOTFILES_DIR"
 # List of required commands
 REQUIRED_CMDS=(
     "stow"     # gnu stow
-    "nu"       # nushell
     "starship" # prompt style
     "carapace" # autocomplete
     "nvim"     # neovim
     "tmux"     # terminal multiplexer
     "fzf"      # fuzzy finder
+    "zoxide"   # smarter cd
     "fd"       # find
     "rg"       # ripgrep
 )
@@ -120,31 +120,15 @@ for package in */; do
 done
 
 # ============================================================================
-# macOS: Nushell config path fix
+# Antidote (Zsh Plugin Manager) Installation
 # ============================================================================
-# macOS Nushell uses ~/Library/Application Support/nushell/ by default
-# but our dotfiles stow to ~/.config/nushell/
+ANTIDOTE_DIR="$HOME/.antidote"
 
-if [[ "$(uname)" == "Darwin" ]]; then
-    NUSHELL_MACOS_DIR="$HOME/Library/Application Support/nushell"
-    NUSHELL_CONFIG_DIR="$HOME/.config/nushell"
-
-    # Only proceed if stowing worked (config dir exists)
-    if [ -d "$NUSHELL_CONFIG_DIR" ]; then
-        if [ -L "$NUSHELL_MACOS_DIR" ]; then
-            echo "✅ Nushell macOS symlink already exists"
-        else
-            # Back up existing macOS config if present
-            if [ -d "$NUSHELL_MACOS_DIR" ]; then
-                echo "📋 Backing up existing Nushell macOS config..."
-                mv "$NUSHELL_MACOS_DIR" "${NUSHELL_MACOS_DIR}.bak"
-            fi
-            ln -s "$NUSHELL_CONFIG_DIR" "$NUSHELL_MACOS_DIR"
-            echo "✅ Created Nushell macOS symlink: $NUSHELL_MACOS_DIR → $NUSHELL_CONFIG_DIR"
-        fi
-    else
-        echo "⚠️  Warning: ~/.config/nushell directory not found. Did stow fail?"
-    fi
+if [ ! -d "$ANTIDOTE_DIR" ]; then
+    echo "🔌 Installing Antidote plugin manager..."
+    git clone --depth=1 https://github.com/mattmc3/antidote.git "$ANTIDOTE_DIR"
+else
+    echo "✅ Antidote is already installed"
 fi
 
 

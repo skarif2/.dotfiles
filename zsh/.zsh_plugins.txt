@@ -1,0 +1,19 @@
+# Zsh Plugins Manifest (managed by Antidote)
+
+# Oh My Zsh Plugins
+ohmyzsh/ohmyzsh path:plugins/git
+ohmyzsh/ohmyzsh path:plugins/sudo
+ohmyzsh/ohmyzsh path:plugins/aws
+ohmyzsh/ohmyzsh path:plugins/command-not-found
+
+# Modern features
+zsh-users/zsh-completions
+Aloxaf/fzf-tab
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-syntax-highlighting
+
+# Vi-mode improvements (replaces Zsh's default bindkey -v weirdness)
+jeffreytse/zsh-vi-mode
+
+# Must load after vi-mode to ensure widgets exist
+zsh-users/zsh-history-substring-search

@@ -1,9 +1,9 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-[╭─ ](bold green)$username$hostname$directory$git_branch$git_state$git_status$package\
+(bold green)$username$hostname$directory$git_branch$git_state$git_status$package\
 $nodejs$rust$python$golang$terraform$nix_shell$docker_context$line_break\
-[╰─ ](bold green)"""
+(bold green)$character"""
 
 right_format = """$aws$cmd_duration"""
 
@@ -76,3 +76,12 @@ format = '[$symbol(profile: "$profile" )(\(region: $region\) )]($style)'
 disabled = false
 style = 'bold blue'
 symbol = " "
+
+# ============================================================================
+# Prompt Characters (Vi-mode Indicators)
+# ============================================================================
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vicmd_symbol = "[❮ N](bold purple)"

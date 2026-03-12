@@ -6,7 +6,7 @@ Modern, cross-platform development environment configuration managed with [GNU S
 
 ### Shell & Prompt
 
-- **[Nushell](https://www.nushell.sh/)** — Modern shell with structured data pipelines, built-in completions, and vi mode
+- **[Zsh](https://zsh.sourceforge.io/)** — Fast, default macOS shell configured for simplicity (no oh-my-zsh) with `zsh-autosuggestions` and `zsh-syntax-highlighting`
 - **[Starship](https://starship.rs/)** — Fast, minimal prompt with git status, language versions, and execution time
 - **[Carapace](https://carapace-sh.github.io/)** — Multi-shell completion engine with support for 1000+ commands
 
@@ -33,12 +33,12 @@ Modern, cross-platform development environment configuration managed with [GNU S
 
 *Because life's too short for slow shells and janky version managers.*
 
-### Nushell over Bash/Zsh
+### Zsh over Heavy Frameworks (like oh-my-zsh)
 
-- **Structured data**: Commands output tables, not text — pipe JSON, CSV, etc. natively (no more `awk '{print $2}'` nightmares)
-- **Better errors**: Clear error messages with suggestions (instead of "command not found" and a shrug)
-- **Cross-platform**: Same syntax on macOS, Linux, and Windows
-- **Modern defaults**: Vi mode, fuzzy completions, and syntax highlighting built-in
+- **Performance**: Sourcing a couple of essential plugins directly means zero plugin-manager overhead.
+- **Simplicity**: No bloated configurations, just what you need.
+- **Modern feel built-in**: We manually clone `zsh-autosuggestions` (ghost-text) and `zsh-syntax-highlighting` (valid/invalid command colors) to get all the benefits of modern shells instantly.
+- **Built-in**: It is already the default shell on macOS.
 
 ### Volta over fnm/nvm
 
@@ -50,7 +50,7 @@ Modern, cross-platform development environment configuration managed with [GNU S
 ### Starship over oh-my-zsh themes
 
 - **Performance**: Written in Rust, renders in milliseconds (your prompt won't lag behind your typing)
-- **Universal**: Same prompt in Nushell, Zsh, Bash, Fish, PowerShell
+- **Universal**: Same prompt in Zsh, Bash, Fish, PowerShell
 - **Minimal by default**: Shows only relevant context (git status, Node version, etc.) — no ASCII art locomotives
 
 ## 🛠️ Installation
@@ -95,7 +95,7 @@ Detects macOS or Linux and adjusts behavior accordingly.
 
 On macOS, automatically installs all required tools via Homebrew:
 
-- CLI tools: `stow`, `nu`, `starship`, `carapace`, `nvim`, `tmux`, `fzf`, `fd`, `rg`
+- CLI tools: `stow`, `starship`, `carapace`, `nvim`, `tmux`, `fzf`, `fd`, `rg`
 - GUI apps: AeroSpace, Ghostty, Fira Code Nerd Font
 
 On Linux, it checks for missing tools and prompts you to install them manually using your package manager.
@@ -105,9 +105,10 @@ On Linux, it checks for missing tools and prompts you to install them manually u
 Uses GNU Stow to create symlinks from `~/.dotfiles/` to your home directory:
 
 ``` bash
-~/.dotfiles/nushell/.config/nushell/config.nu  →  ~/.config/nushell/config.nu
-~/.dotfiles/nvim/.config/nvim/init.lua         →  ~/.config/nvim/init.lua
-~/.dotfiles/tmux/.config/tmux/tmux.conf        →  ~/.config/tmux/tmux.conf
+~/.dotfiles/zsh/.zshrc                   →  ~/.zshrc
+~/.dotfiles/zsh/.zshenv                  →  ~/.zshenv
+~/.dotfiles/nvim/.config/nvim/init.lua   →  ~/.config/nvim/init.lua
+~/.dotfiles/tmux/.config/tmux/tmux.conf  →  ~/.config/tmux/tmux.conf
 ...
 ```
 
@@ -117,9 +118,14 @@ This means:
 - ✅ Easy to version control
 - ✅ Clean uninstall: `stow -D <package>` removes all symlinks
 
-#### 4. **macOS-Specific Fixes**
+#### 4. **Zsh Plugins**
 
-On macOS, Nushell looks for config at `~/Library/Application Support/nushell/` by default, but we use `~/.config/nushell/` for cross-platform compatibility. The script creates a symlink to bridge this.
+Instead of using a bulky plugin manager, the setup script clones two essential repositories directly into `~/.zsh_plugins/`:
+
+- `zsh-autosuggestions`
+- `zsh-syntax-highlighting`
+
+These are then sourced directly in your `~/.zshrc`.
 
 #### 5. **Volta Installation**
 
@@ -164,10 +170,9 @@ Each directory is a "stow package" containing config files:
 
 ```bash
 .dotfiles/
-├── nushell/
-│   └── .config/nushell/
-│       ├── config.nu      # Aliases, functions, keybindings
-│       └── env.nu         # Environment variables, PATH
+├── zsh/                   # Zsh configuration
+│   ├── .zshrc             # Interactive shell settings
+│   └── .zshenv            # Environment variables
 ├── nvim/
 │   └── .config/nvim/      # Your Neovim config
 ├── starship/
@@ -213,12 +218,14 @@ Update `setup.sh` to remove it from `REQUIRED_CMDS` array.
 
 Use conditional logic in configs:
 
-**Nushell** (`env.nu`):
+Use conditional logic in configs:
 
-```nu
-if (sys host | get name) == "Darwin" {
+**Zsh** (`.zshrc`):
+
+```bash
+if [[ "$(uname)" == "Darwin" ]]; then
     # macOS-specific PATH additions
-}
+fi
 ```
 
 **Tmux** (`tmux.conf`):
@@ -244,7 +251,7 @@ if-shell "uname | grep -q Darwin" \
 │
 ├── aerospace/           # AeroSpace window manager (macOS)
 ├── ghostty/             # Ghostty terminal config
-├── nushell/             # Nushell shell config
+├── zsh/                 # Zsh shell config
 ├── nvim/                # Neovim editor config
 ├── scripts/             # Custom shell scripts
 ├── starship/            # Starship prompt config
@@ -264,7 +271,7 @@ The setup script detects Linux and:
 
 ```bash
 sudo apt update
-sudo apt install stow nushell neovim tmux fzf fd-find ripgrep
+sudo apt install stow zsh neovim tmux fzf fd-find ripgrep
 ```
 
 **Note**: Some package names differ by distro:

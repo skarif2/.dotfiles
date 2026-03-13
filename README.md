@@ -96,7 +96,7 @@ Detects macOS or Linux and adjusts behavior accordingly.
 On macOS, automatically installs all required tools via Homebrew:
 
 - CLI tools: `stow`, `starship`, `carapace`, `nvim`, `tmux`, `fzf`, `fd`, `rg`
-- GUI apps: AeroSpace, Ghostty, Fira Code Nerd Font
+- GUI apps: AeroSpace, Ghostty, JetBrains Mono Nerd Font
 
 On Linux, it checks for missing tools and prompts you to install them manually using your package manager.
 

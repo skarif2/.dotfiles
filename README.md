@@ -6,7 +6,7 @@ Modern, cross-platform development environment configuration managed with [GNU S
 
 ### Shell & Prompt
 
-- **[Zsh](https://zsh.sourceforge.io/)** — Fast, default macOS shell configured for simplicity (no oh-my-zsh) with `zsh-autosuggestions` and `zsh-syntax-highlighting`
+- **[Zsh](https://zsh.sourceforge.io/)** — Fast, default macOS shell configured for simplicity using [Antidote](https://getantidote.github.io/) for fast, lightweight plugin management
 - **[Starship](https://starship.rs/)** — Fast, minimal prompt with git status, language versions, and execution time
 - **[Carapace](https://carapace-sh.github.io/)** — Multi-shell completion engine with support for 1000+ commands
 
@@ -33,12 +33,12 @@ Modern, cross-platform development environment configuration managed with [GNU S
 
 *Because life's too short for slow shells and janky version managers.*
 
-### Zsh over Heavy Frameworks (like oh-my-zsh)
+### Zsh Plugin Management with Antidote
 
-- **Performance**: Sourcing a couple of essential plugins directly means zero plugin-manager overhead.
-- **Simplicity**: No bloated configurations, just what you need.
-- **Modern feel built-in**: We manually clone `zsh-autosuggestions` (ghost-text) and `zsh-syntax-highlighting` (valid/invalid command colors) to get all the benefits of modern shells instantly.
-- **Built-in**: It is already the default shell on macOS.
+- **Performance**: Antidote compiles the plugin loading script statically, meaning zero overhead during startup compared to heavy frameworks like oh-my-zsh.
+- **Simplicity**: Manage plugins declaratively in a simple `~/.dotfiles/zsh/.zsh_plugins.txt` file.
+- **Modern feel built-in**: We use essential plugins like `zsh-autosuggestions`, `fzf-tab`, and `zsh-syntax-highlighting` to get all the benefits of modern shells instantly, without the bloat.
+- **Built-in Shell**: Zsh is already the default shell on macOS.
 
 ### Volta over fnm/nvm
 
@@ -120,12 +120,26 @@ This means:
 
 #### 4. **Zsh Plugins**
 
-Instead of using a bulky plugin manager, the setup script clones two essential repositories directly into `~/.zsh_plugins/`:
+Instead of using a bulky framework or manually cloning repositories, we use [Antidote](https://getantidote.github.io/) to manage and statically compile Zsh plugins for maximum performance.
 
-- `zsh-autosuggestions`
-- `zsh-syntax-highlighting`
+The plugins are defined in `~/.dotfiles/zsh/.zsh_plugins.txt` and include:
 
-These are then sourced directly in your `~/.zshrc`.
+**Essential Features**:
+- `zsh-autosuggestions`: Fish-like autocomplete via ghost text
+- `zsh-syntax-highlighting`: Highlights valid/invalid commands as you type
+- `zsh-completions`: Additional completion definitions
+- `fzf-tab`: Replaces Zsh's default completion menu with fzf
+
+**Oh My Zsh Features (extracted via Antidote)**:
+- `git`: Useful git aliases and functions
+- `sudo`: Press `<Esc><Esc>` to prefix your current command with `sudo`
+- `aws` and `command-not-found`
+
+**Keybindings & Movement**:
+- `zsh-vi-mode`: A better Vi-mode implementation for Zsh
+- `zsh-history-substring-search`: Type part of a command and press up/down to search history
+
+Antidote reads `.zsh_plugins.txt` and compiles it into a static file (`~/.zsh_plugins.zsh`) for lightning-fast loading in your `.zshrc`.
 
 #### 5. **Volta Installation**
 

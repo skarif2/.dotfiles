@@ -25,7 +25,7 @@ REQUIRED_CMDS=(
 REQUIRED_CASKS=(
     "nikitabobko/tap/aerospace"
     "ghostty"
-    "font-fira-code-nerd-font"
+    "font-jetbrains-mono-nerd-font"
 )
 
 # ============================================================================

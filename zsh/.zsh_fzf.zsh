@@ -4,13 +4,23 @@
 # ============================================================================
 
 # ----------------------------------------------------------------------------
-# Core FZF Options (Tokyo Night theme)
+# Core FZF Options (Follows Terminal Theme)
 # ----------------------------------------------------------------------------
 export FZF_DEFAULT_OPTS=" \
-  --color=bg+:#283457,bg:#16161e,spinner:#27a1b9,hl:#ff9e64 \
-  --color=fg:#c0caf5,header:#ff9e64,info:#545c7e,pointer:#27a1b9 \
-  --color=marker:#27a1b9,fg+:#c0caf5,prompt:#27a1b9,hl+:#ff9e64 \
-  --bind=ctrl-d:half-page-down,ctrl-u:half-page-up"
+  --layout=reverse \
+  --info=inline \
+  --height=80% \
+  --multi \
+  --border=rounded \
+  --preview 'bat --color=always --style=numbers --line-range=:500 {} 2>/dev/null || ls -lah --color=always {} 2>/dev/null' \
+  --preview-window 'right,50%,border-rounded' \
+  --prompt='❯ ' \
+  --pointer='▶ ' \
+  --marker='✓ ' \
+  --bind '?:toggle-preview' \
+  --bind 'ctrl-a:select-all' \
+  --bind 'ctrl-e:deselect-all' \
+  --bind 'ctrl-d:half-page-down,ctrl-u:half-page-up'"
 
 # ----------------------------------------------------------------------------
 # FZF Helper Functions
@@ -18,18 +28,18 @@ export FZF_DEFAULT_OPTS=" \
 
 # Fuzzy find and open a file
 function fzf-file() {
-    fd --type f | fzf
+    fd --type f --color=always | fzf --ansi
 }
 
 # Fuzzy find a directory
 function fzf-dir() {
-    fd --type d | fzf
+    fd --type d --color=always | fzf --ansi
 }
 
 # Fuzzy cd into a directory
 function cdf() {
     local dir
-    dir=$(fd --type d | fzf)
+    dir=$(fd --type d --color=always | fzf --ansi)
     if [[ -n "$dir" ]]; then
         cd "$dir"
     fi

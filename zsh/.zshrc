@@ -89,20 +89,18 @@ if [[ -f "$HOME/.dotfiles/scripts/.scripts/clone-worktree.sh" ]]; then
     source "$HOME/.dotfiles/scripts/.scripts/clone-worktree.sh"
 fi
 
-# Custom Dotfile/Plugin Updater
-function update-dotfiles() {
-    echo "📦 Pulling latest dotfiles..."
-    git -C "$HOME/.dotfiles" pull
-    
-    echo "🔄 Updating zsh plugins via Antidote..."
-    source ~/.antidote/antidote.zsh
-    antidote update
-    
-    echo "🧹 Clearing Starship cache..."
-    rm -f ~/.cache/starship.zsh
-    
-    echo "✅ Done! Run 'source ~/.zshrc' or open a new terminal to apply."
+# Async Antidote Updater
+function async_antidote_update() {
+    (
+        source ~/.antidote/antidote.zsh
+        antidote update > ~/.antidote_update.log 2>&1
+    ) &!
 }
+
+# Run the async update once a day (if the log file is older than 24h)
+if [[ ! -f ~/.antidote_update.log || $(find ~/.antidote_update.log -mtime +1 2>/dev/null) ]]; then
+    async_antidote_update
+fi
 
 # ============================================================================
 # Antidote Plugin Manager Initialization
@@ -172,39 +170,6 @@ if command -v starship >/dev/null 2>&1; then
     fi
     source ~/.cache/starship.zsh
 fi
-
-# Added by Antigravity
-export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
 
 # Added by Antigravity
 export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"

@@ -51,7 +51,7 @@ function dina_worktree_add() {
     fi
 
     # 3 & 4. Run git worktree add
-    git worktree add "${git_args[@]}" "$worktree_path"
+    git worktree add "$worktree_path" "${git_args[@]}"
     
     if [[ $? -ne 0 ]]; then
         echo "Error: Failed to create worktree." >&2

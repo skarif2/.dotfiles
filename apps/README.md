@@ -12,7 +12,7 @@ bash ~/.dotfiles/apps/install.sh
 
 ## What Gets Installed
 
-The script installs **19 applications** via Homebrew:
+The script installs **20 applications** via Homebrew:
 
 ### Development Tools (3)
 
@@ -46,9 +46,10 @@ The script installs **19 applications** via Homebrew:
 
 - **VLC** - Media player
 
-### Utilities & System Tools (4)
+### Utilities & System Tools (5)
 
 - **Alcove** - Window management/productivity
+- **Cockpit Tools** - Antigravity quota monitor
 - **Ice** - Menu bar management
 - **Onyx** - System maintenance
 - **Sol** - macOS launcher

@@ -59,10 +59,18 @@ function dotfiles() {
 }
 
 # Standard git worktree
-alias gw="git worktree"
+function gw() {
+    # If the first argument passed to gw is "add", run git fetch first
+    if [[ "$1" == "add" ]]; then
+        echo "Fetching latest remote branches..."
+        git fetch --quiet
+    fi
+    # Pass all arguments exactly as typed to git worktree
+    git worktree "$@"
+}
 
 # Custom worktree tools (functions sourced below)
-alias gwf="dina_worktree_add"
+alias gwf="saga_worktree_add"
 alias gwc="clone_worktree"
 
 # Directory listing
@@ -81,12 +89,12 @@ alias lla='ls -la'
 # ============================================================================
 
 # Source custom scripts (converted from Nushell)
-if [[ -f "$HOME/.dotfiles/scripts/.scripts/dina-frontend.sh" ]]; then
-    source "$HOME/.dotfiles/scripts/.scripts/dina-frontend.sh"
+if [[ -f "$HOME/.dotfiles/scripts/.scripts/saga_frontend.sh" ]]; then
+    source "$HOME/.dotfiles/scripts/.scripts/saga_frontend.sh"
 fi
 
-if [[ -f "$HOME/.dotfiles/scripts/.scripts/clone-worktree.sh" ]]; then
-    source "$HOME/.dotfiles/scripts/.scripts/clone-worktree.sh"
+if [[ -f "$HOME/.dotfiles/scripts/.scripts/clone_worktree.sh" ]]; then
+    source "$HOME/.dotfiles/scripts/.scripts/clone_worktree.sh"
 fi
 
 # Async Antidote Updater

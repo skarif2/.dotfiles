@@ -3,3 +3,5 @@ tmux/.config/tmux/plugins
 
 # macos files
 .DS_Store
+
+.vscode

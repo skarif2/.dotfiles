@@ -66,19 +66,6 @@ ensure_macos_tools() {
              fi
         fi
     done
-
-    echo "🛠️ Checking cockpit-tools (antigravity quota monitor)..."
-    if brew list --cask cockpit-tools &>/dev/null; then
-         echo "✅ cockpit-tools is installed"
-    else
-         echo "⬇️ Installing cockpit-tools..."
-         brew tap jlcodes99/cockpit-tools https://github.com/jlcodes99/cockpit-tools
-         if brew install --cask cockpit-tools; then
-             echo "✅ Installed cockpit-tools"
-         else
-             echo "⚠️  Failed to install cockpit-tools. Skipping."
-         fi
-    fi
 }
 
 ensure_linux_tools() {

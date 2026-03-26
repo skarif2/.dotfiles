@@ -74,7 +74,7 @@ bash ~/.dotfiles/setup.sh
 bash ~/.dotfiles/apps/install.sh
 ```
 
-This installs **19 applications** via Homebrew including:
+This installs **20 applications** via Homebrew including:
 
 - Development tools (Antigravity, VS Code, Zed)
 - Browsers (Arc, Brave, Chrome, DuckDuckGo)

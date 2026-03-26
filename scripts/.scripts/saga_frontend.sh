@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Dina Frontend Git Worktree Management Module (Bash/Zsh Port)
+# Saga Frontend Git Worktree Management Module (Bash/Zsh Port)
 
-function dina_worktree_add() {
+function saga_worktree_add() {
     local branch=""
     local force=0
     local worktree_path=""
@@ -49,6 +49,9 @@ function dina_worktree_add() {
         echo "Usage: gwf [-b branch] <path> [<commit>]"
         return 1
     fi
+
+    # Fetch latest from remote quietly
+    git fetch -q 2>/dev/null
 
     # 3 & 4. Run git worktree add
     git worktree add "$worktree_path" "${git_args[@]}"
@@ -104,7 +107,7 @@ function dina_worktree_add() {
 }
 
 # ============================================================================
-# Zsh Tab Completion for dina_worktree_add / gwf
+# Zsh Tab Completion for saga_worktree_add / gwf
 # ============================================================================
 # Supports two usage patterns:
 #   gwf -b imp/new-branch folder-name imp/base-branch
@@ -116,7 +119,7 @@ function dina_worktree_add() {
 #   - First positional      → free text (folder name), no completion
 #   - Last positional (base branch) → existing branch completion with filtering
 
-function _dina_worktree_add() {
+function _saga_worktree_add() {
     local -a branches filtered
     local has_b=0 word prefix
 

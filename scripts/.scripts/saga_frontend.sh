@@ -93,16 +93,9 @@ function saga_worktree_add() {
         echo "Linked .env files from $env_source"
     fi
 
-    # 7. Open and Start
+    # 7. Open
     if command -v agy >/dev/null 2>&1; then
         agy .
-    fi
-    
-    if command -v yarn >/dev/null 2>&1; then
-        yarn install
-        yarn dev
-    else
-        echo "⚠️ Yarn not found. Skipping install and dev server."
     fi
 }
 

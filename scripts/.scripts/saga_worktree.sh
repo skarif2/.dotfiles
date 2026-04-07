@@ -113,7 +113,7 @@ function __saga_worktree_add_core() {
 # ============================================================================
 function gwf() { __saga_worktree_add_core --link ".env*" "$@" }
 function gwm() { __saga_worktree_add_core --link "env.mock.ts" "$@" }
-function gwb() { __saga_worktree_add_core --link ".env" "$@" }
+function gwb() { __saga_worktree_add_core "$@" }
 function gwd() { __saga_worktree_add_core "$@" }
 
 # ============================================================================

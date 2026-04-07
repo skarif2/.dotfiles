@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
-# Saga Frontend Git Worktree Management Module (Bash/Zsh Port)
+# Saga Git Worktree Management Module (Bash/Zsh Port)
 
-function saga_worktree_add() {
+function __saga_worktree_add_core() {
+    local link_pattern=""
+    local git_args=()
     local branch=""
     local force=0
     local worktree_path=""
-    local git_args=()
 
     # Parse arguments
     while [[ $# -gt 0 ]]; do
         case "$1" in
+            --link)
+                link_pattern="$2"
+                shift 2
+                ;;
             -b|--branch)
                 branch="$2"
                 git_args+=("-b" "$branch")
@@ -46,8 +51,21 @@ function saga_worktree_add() {
 
     # 2. Identify the worktree path
     if [[ -z "$worktree_path" ]]; then
-        echo "Usage: gwf [-b branch] <path> [<commit>]"
+        echo "Usage: gwf|gwm|gwb|gwd [-b branch] <path> [<commit>]"
         return 1
+    fi
+
+    # Pre-flight: verify env files exist in the project root BEFORE touching git state
+    # Using ls instead of compgen -G for reliable zsh compatibility (compgen is bash-only)
+    if [[ -n "$link_pattern" ]]; then
+        local project_root
+        project_root=$(pwd)
+        if ! ls ./$link_pattern > /dev/null 2>&1; then
+            echo "Error: Required env file(s) matching '$link_pattern' not found." >&2
+            echo "  → Place them in: $project_root" >&2
+            echo "  → Then re-run this command." >&2
+            return 1
+        fi
     fi
 
     # Fetch latest from remote quietly
@@ -69,28 +87,19 @@ function saga_worktree_add() {
         return 1
     fi
 
-    # 6. Link .env files (The "Efficient way")
-    local env_source=""
-    
-    if [[ -f "../.env" ]]; then
-        env_source=".."
-    elif [[ -f "../main/.env" ]]; then
-        env_source="../main"
-    fi
-
-    if [[ -n "$env_source" ]]; then
-        for f in "$env_source"/.env*; do
-            # Check if matching files exist to avoid literal wildcard pass
+    # 6. Link environment files from the project root (bare repo root)
+    if [[ -n "$link_pattern" ]]; then
+        for f in "../$link_pattern"; do
             [[ -e "$f" ]] || continue
-            
+
             local name
             name=$(basename "$f")
-            
+
             if [[ ! -e "$name" ]]; then
                 ln -s "$f" "$name"
             fi
         done
-        echo "Linked .env files from $env_source"
+        echo "Linked env file(s) ($link_pattern) from project root"
     fi
 
     # 7. Open
@@ -100,23 +109,20 @@ function saga_worktree_add() {
 }
 
 # ============================================================================
-# Zsh Tab Completion for saga_worktree_add / gwf
+# User-Facing Commands
 # ============================================================================
-# Supports two usage patterns:
-#   gwf -b imp/new-branch folder-name imp/base-branch
-#   gwf folder-name imp/base-branch
-#
-# TAB completion behaviour:
-#   - After `-b`            → free text (new branch name), no completion
-#   - After `-f`            → nothing
-#   - First positional      → free text (folder name), no completion
-#   - Last positional (base branch) → existing branch completion with filtering
+function gwf() { __saga_worktree_add_core --link ".env*" "$@" }
+function gwm() { __saga_worktree_add_core --link "env.mock.ts" "$@" }
+function gwb() { __saga_worktree_add_core --link ".env" "$@" }
+function gwd() { __saga_worktree_add_core "$@" }
 
-function _saga_worktree_add() {
+# ============================================================================
+# Zsh Tab Completion for Worktree Tools
+# ============================================================================
+function _saga_worktree_add_core() {
     local -a branches filtered
     local has_b=0 word prefix
 
-    # Count arguments and check if -b flag is present
     for word in "${words[@]}"; do
         if [[ "$word" == "-b" || "$word" == "--branch" ]]; then
             has_b=1
@@ -124,28 +130,18 @@ function _saga_worktree_add() {
         fi
     done
 
-    # Determine what the CURRENT position is completing:
-    #
-    # With -b:    gwf -b <new-branch> <folder> <base-branch>
-    #             pos:     2             3         4
-    # Without -b: gwf <folder> <base-branch>
-    #             pos:   1         2
-
     local current_word="${words[$CURRENT]}"
     local prev_word="${words[$((CURRENT - 1))]}"
 
-    # Right after -b or --branch → user is typing the NEW branch name, skip
     if [[ "$prev_word" == "-b" || "$prev_word" == "--branch" ]]; then
         _message "New branch name (e.g. imp/my-feature)"
         return 0
     fi
 
-    # Right after -f or --force → nothing to complete
     if [[ "$prev_word" == "-f" || "$prev_word" == "--force" ]]; then
         return 0
     fi
 
-    # Count positional args already typed (excluding flags and their values)
     local positional_count=0
     local skip_next=0
     for word in "${words[@]:1:$((CURRENT - 2))}"; do
@@ -154,7 +150,7 @@ function _saga_worktree_add() {
             continue
         fi
         if [[ "$word" == "-b" || "$word" == "--branch" ]]; then
-            skip_next=1  # skip the next word (new branch name)
+            skip_next=1  
             continue
         fi
         if [[ "$word" == "-f" || "$word" == "--force" ]]; then
@@ -163,13 +159,11 @@ function _saga_worktree_add() {
         (( positional_count++ ))
     done
 
-    # First positional = folder name → no completion
     if [[ $positional_count -eq 0 ]]; then
         _message "Worktree folder name"
         return 0
     fi
 
-    # Second positional onward = base branch → complete from existing branches
     branches=($(git branch --all --format='%(refname:short)' 2>/dev/null \
         | sed 's|^origin/||' \
         | sort -u))
@@ -182,13 +176,11 @@ function _saga_worktree_add() {
     prefix="$current_word"
 
     if [[ -n "$prefix" ]]; then
-        # Priority 1: branches that START with the typed prefix
         filtered=()
         for b in $branches; do
             [[ "$b" == ${prefix}* ]] && filtered+=("$b")
         done
 
-        # Priority 2: fallback to branches that CONTAIN the typed prefix
         if [[ ${#filtered[@]} -eq 0 ]]; then
             for b in $branches; do
                 [[ "$b" == *${prefix}* ]] && filtered+=("$b")
@@ -205,3 +197,10 @@ function _saga_worktree_add() {
     fi
 }
 
+# Emitting completions only if compdef exists in current shell scope
+if type compdef >/dev/null 2>&1; then
+    compdef _saga_worktree_add_core gwf
+    compdef _saga_worktree_add_core gwm
+    compdef _saga_worktree_add_core gwb
+    compdef _saga_worktree_add_core gwd
+fi

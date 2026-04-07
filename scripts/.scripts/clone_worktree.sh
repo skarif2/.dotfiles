@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Git Bare Clone for Worktrees Module (Bash/Zsh Port)
+# Git Bare Clone for Worktree Module (Bash/Zsh Port)
 
 function clone_worktree() {
     local url=""
@@ -57,14 +57,8 @@ function clone_worktree() {
     # 4. Fetch all
     git fetch origin
 
-    # 5. Add main/master worktree
-    # Check if master or main exists
-    local default_branch="main"
-    if git rev-parse --verify master >/dev/null 2>&1; then
-        default_branch="master"
-    fi
-
-    git worktree add main "$default_branch"
+    echo ""
+    echo "✓ Bare repo cloned: $repo_name/"
 }
 
 # ============================================================================
@@ -121,3 +115,14 @@ function _clone_worktree() {
     esac
 }
 
+
+# ============================================================================
+# Alias & Completion Registration
+# ============================================================================
+alias gwc="clone_worktree"
+
+# Emitting completions only if compdef exists in current shell scope
+if type compdef >/dev/null 2>&1; then
+    compdef _clone_worktree clone_worktree
+    compdef _clone_worktree gwc
+fi

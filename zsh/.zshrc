@@ -69,9 +69,6 @@ function gw() {
     git worktree "$@"
 }
 
-# Custom worktree tools (functions sourced below)
-alias gwf="saga_worktree_add"
-alias gwc="clone_worktree"
 
 # Directory listing
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -87,15 +84,6 @@ alias lla='ls -la'
 # ============================================================================
 # Custom Functions/Scripts
 # ============================================================================
-
-# Source custom scripts (converted from Nushell)
-if [[ -f "$HOME/.dotfiles/scripts/.scripts/saga_frontend.sh" ]]; then
-    source "$HOME/.dotfiles/scripts/.scripts/saga_frontend.sh"
-fi
-
-if [[ -f "$HOME/.dotfiles/scripts/.scripts/clone_worktree.sh" ]]; then
-    source "$HOME/.dotfiles/scripts/.scripts/clone_worktree.sh"
-fi
 
 # Async Antidote Updater
 function async_antidote_update() {
@@ -152,9 +140,6 @@ source ${zsh_plugins}_late.zsh
 # FZF config — sourced after fzf-tab is loaded so zstyles apply correctly
 source "$HOME/.dotfiles/zsh/.zsh_fzf.zsh"
 
-# Register custom completions (must be after compinit)
-source "$HOME/.dotfiles/zsh/.zsh_completions.zsh"
-
 # Override OMZ git plugin aliases that conflict with our own
 alias gg="lazygit"
 
@@ -177,6 +162,15 @@ if command -v starship >/dev/null 2>&1; then
         starship init zsh > ~/.cache/starship.zsh
     fi
     source ~/.cache/starship.zsh
+fi
+
+# Source Saga worktree late to allow inline compdef
+if [[ -f "$HOME/.dotfiles/scripts/.scripts/clone_worktree.sh" ]]; then
+    source "$HOME/.dotfiles/scripts/.scripts/clone_worktree.sh"
+fi
+
+if [[ -f "$HOME/.dotfiles/scripts/.scripts/saga_worktree.sh" ]]; then
+    source "$HOME/.dotfiles/scripts/.scripts/saga_worktree.sh"
 fi
 
 # Added by Antigravity

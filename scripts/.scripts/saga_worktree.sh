@@ -60,7 +60,7 @@ function __saga_worktree_add_core() {
     if [[ -n "$link_pattern" ]]; then
         local project_root
         project_root=$(pwd)
-        if ! ls ./$link_pattern > /dev/null 2>&1; then
+        if ! ls ./$~link_pattern > /dev/null 2>&1; then
             echo "Error: Required env file(s) matching '$link_pattern' not found." >&2
             echo "  → Place them in: $project_root" >&2
             echo "  → Then re-run this command." >&2
@@ -89,7 +89,7 @@ function __saga_worktree_add_core() {
 
     # 6. Link environment files from the project root (bare repo root)
     if [[ -n "$link_pattern" ]]; then
-        for f in "../$link_pattern"; do
+        for f in ../$~link_pattern; do
             [[ -e "$f" ]] || continue
 
             local name

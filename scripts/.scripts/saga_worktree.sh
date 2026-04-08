@@ -2,7 +2,7 @@
 # Saga Git Worktree Management Module (Bash/Zsh Port)
 
 function __saga_worktree_add_core() {
-    local link_pattern=""
+    local link_patterns=()
     local git_args=()
     local branch=""
     local force=0
@@ -12,7 +12,7 @@ function __saga_worktree_add_core() {
     while [[ $# -gt 0 ]]; do
         case "$1" in
             --link)
-                link_pattern="$2"
+                link_patterns+=("$2")
                 shift 2
                 ;;
             -b|--branch)
@@ -51,18 +51,23 @@ function __saga_worktree_add_core() {
 
     # 2. Identify the worktree path
     if [[ -z "$worktree_path" ]]; then
-        echo "Usage: gwf|gwm|gwb|gwd [-b branch] <path> [<commit>]"
+        echo "Usage: gwf|gwb|gwd [-b branch] <path> [<commit>]"
         return 1
     fi
 
-    # Pre-flight: verify env files exist in the project root BEFORE touching git state
-    # Using ls instead of compgen -G for reliable zsh compatibility (compgen is bash-only)
-    if [[ -n "$link_pattern" ]]; then
+    # Pre-flight: verify all link targets exist in the project root BEFORE touching git state
+    if [[ ${#link_patterns[@]} -gt 0 ]]; then
         local project_root
         project_root=$(pwd)
-        if ! ls ./$~link_pattern > /dev/null 2>&1; then
-            echo "Error: Required env file(s) matching '$link_pattern' not found." >&2
-            echo "  → Place them in: $project_root" >&2
+        local missing=0
+        for pattern in "${link_patterns[@]}"; do
+            if ! ls ./$~pattern > /dev/null 2>&1; then
+                echo "Error: Required file/folder matching '$pattern' not found." >&2
+                missing=1
+            fi
+        done
+        if [[ $missing -eq 1 ]]; then
+            echo "  → Place missing items in: $project_root" >&2
             echo "  → Then re-run this command." >&2
             return 1
         fi
@@ -87,19 +92,21 @@ function __saga_worktree_add_core() {
         return 1
     fi
 
-    # 6. Link environment files from the project root (bare repo root)
-    if [[ -n "$link_pattern" ]]; then
-        for f in ../$~link_pattern; do
-            [[ -e "$f" ]] || continue
+    # 6. Link files/folders from the project root (bare repo root)
+    if [[ ${#link_patterns[@]} -gt 0 ]]; then
+        for pattern in "${link_patterns[@]}"; do
+            for f in ../$~pattern; do
+                [[ -e "$f" ]] || continue
 
-            local name
-            name=$(basename "$f")
+                local name
+                name=$(basename "$f")
 
-            if [[ ! -e "$name" ]]; then
-                ln -s "$f" "$name"
-            fi
+                if [[ ! -e "$name" ]]; then
+                    ln -s "$f" "$name"
+                    echo "  ✓ Linked: $name"
+                fi
+            done
         done
-        echo "Linked env file(s) ($link_pattern) from project root"
     fi
 
     # 7. Open
@@ -112,7 +119,6 @@ function __saga_worktree_add_core() {
 # User-Facing Commands
 # ============================================================================
 function gwf() { __saga_worktree_add_core --link ".env*" "$@" }
-function gwm() { __saga_worktree_add_core --link "env.mock.ts" "$@" }
 function gwb() { __saga_worktree_add_core "$@" }
 function gwd() { __saga_worktree_add_core "$@" }
 
@@ -200,7 +206,6 @@ function _saga_worktree_add_core() {
 # Emitting completions only if compdef exists in current shell scope
 if type compdef >/dev/null 2>&1; then
     compdef _saga_worktree_add_core gwf
-    compdef _saga_worktree_add_core gwm
     compdef _saga_worktree_add_core gwb
     compdef _saga_worktree_add_core gwd
 fi

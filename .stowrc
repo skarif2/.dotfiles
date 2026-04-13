@@ -1,6 +1,9 @@
 --ignore=.stowrc
 --ignore=.git
 --ignore=.gitignore
+--ignore=.vscode
 --ignore=DS_Store
---ignore=README.md
+--ignore=ai-core
 --ignore=apps
+--ignore=setup.sh
+--ignore=README.md

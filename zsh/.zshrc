@@ -52,7 +52,6 @@ alias v="nvim"
 alias vi="nvim"
 alias vim="nvim"
 
-
 # Dotfiles
 function dotfiles() {
     cd ~/.dotfiles && agy .
@@ -69,6 +68,11 @@ function gw() {
     git worktree "$@"
 }
 
+# PI Agent Rules Alias
+alias pi="pi --append-system-prompt ~/.dotfiles/ai-core/master-rules.md"
+
+# Claude Rules Alias
+alias claude='claude --system-prompt "$(cat ~/.dotfiles/ai-core/master-rules.md)"'
 
 # Directory listing
 if [[ "$OSTYPE" == "darwin"* ]]; then

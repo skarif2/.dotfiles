@@ -68,12 +68,6 @@ function gw() {
     git worktree "$@"
 }
 
-# PI Agent Rules Alias
-alias pi="pi --append-system-prompt ~/.dotfiles/ai-core/master-rules.md"
-
-# Claude Rules Alias
-alias claude='claude --system-prompt "$(cat ~/.dotfiles/ai-core/master-rules.md)"'
-
 # Directory listing
 if [[ "$OSTYPE" == "darwin"* ]]; then
     alias ls='ls -G'
@@ -179,3 +173,7 @@ fi
 
 # Added by Antigravity
 export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
+
+# Homebrew OpenJDK 17
+export JAVA_HOME="/opt/homebrew/opt/openjdk@17"
+export PATH="$JAVA_HOME/bin:$PATH"

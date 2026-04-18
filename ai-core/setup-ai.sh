@@ -15,14 +15,9 @@ echo "✅ Gemini/Antigravity connected."
 
 # 2. Pi
 mkdir -p "$HOME/.pi/agent"
-rm -rf "$HOME/.pi/agent/skills"
+rm -rf "$HOME/.pi/agent/AGENTS.md" "$HOME/.pi/agent/skills"
+ln -s "$CORE_DIR/master-rules.md" "$HOME/.pi/agent/AGENTS.md"
 ln -s "$CORE_DIR/skills" "$HOME/.pi/agent/skills"
 echo "✅ Pi agent connected."
-
-# 3. Claude Code
-mkdir -p "$HOME/.claude"
-rm -rf "$HOME/.claude/skills"
-ln -s "$CORE_DIR/skills" "$HOME/.claude/skills"
-echo "✅ Claude Code connected."
 
 echo "All agents are now sharing the same brain."

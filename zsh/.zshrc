@@ -171,6 +171,10 @@ if [[ -f "$HOME/.dotfiles/scripts/.scripts/saga_worktree.sh" ]]; then
     source "$HOME/.dotfiles/scripts/.scripts/saga_worktree.sh"
 fi
 
+if [[ -f "$HOME/.dotfiles/scripts/.scripts/adb_qr.sh" ]]; then
+    source "$HOME/.dotfiles/scripts/.scripts/adb_qr.sh"
+fi
+
 # Added by Antigravity
 export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
 

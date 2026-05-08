@@ -118,7 +118,7 @@ function __saga_worktree_add_core() {
 # ============================================================================
 # User-Facing Commands
 # ============================================================================
-function gwf() { __saga_worktree_add_core --link ".env*" "$@" }
+function gwf() { __saga_worktree_add_core --link ".env*" --link ".zed" "$@" }
 function gwb() { __saga_worktree_add_core "$@" }
 function gwd() { __saga_worktree_add_core "$@" }
 

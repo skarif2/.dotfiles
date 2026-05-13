@@ -24,6 +24,11 @@ if [[ -d "$VOLTA_HOME/bin" ]]; then
   export PATH="$VOLTA_HOME/bin:$PATH"
 fi
 
+# Vite+ (vp) CLI
+if [[ -d "$HOME/.vite-plus/bin" ]]; then
+  export PATH="$HOME/.vite-plus/bin:$PATH"
+fi
+
 # Node Configuration
 export NODE_OPTIONS="--max-old-space-size=8192"
 

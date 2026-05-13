@@ -118,9 +118,35 @@ function __saga_worktree_add_core() {
 # ============================================================================
 # User-Facing Commands
 # ============================================================================
-function gwf() { __saga_worktree_add_core --link ".env*" --link ".zed" "$@" }
-function gwb() { __saga_worktree_add_core "$@" }
-function gwd() { __saga_worktree_add_core "$@" }
+function _saga_check_repo() {
+    local expected=$1
+    local repo_url
+    repo_url=$(git config --get remote.origin.url 2>/dev/null)
+    if [[ -z "$repo_url" ]] || [[ "$repo_url" != *"$expected"* ]]; then
+        echo "Error: This command is reserved for the '$expected' project." >&2
+        return 1
+    fi
+    return 0
+}
+
+function gwf() { 
+    if ! _saga_check_repo "7m-frontend"; then return 1; fi
+    __saga_worktree_add_core --link ".env*" --link ".zed" "$@" || return 1
+    echo "🚀 Running vp install..."
+    vp install
+    echo "🚀 Starting dev server..."
+    vp dev
+}
+
+function gwb() { 
+    if ! _saga_check_repo "7m-backend"; then return 1; fi
+    __saga_worktree_add_core "$@" 
+}
+
+function gwd() { 
+    if ! _saga_check_repo "saga-hosted-docs"; then return 1; fi
+    __saga_worktree_add_core "$@" 
+}
 
 # ============================================================================
 # Zsh Tab Completion for Worktree Tools

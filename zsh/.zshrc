@@ -54,7 +54,7 @@ alias vim="nvim"
 
 # Dotfiles
 function dotfiles() {
-    cd ~/.dotfiles && agy .
+    cd ~/.dotfiles && zed .
 }
 
 # Standard git worktree
@@ -174,9 +174,6 @@ fi
 if [[ -f "$HOME/.dotfiles/scripts/.scripts/adb_qr.sh" ]]; then
     source "$HOME/.dotfiles/scripts/.scripts/adb_qr.sh"
 fi
-
-# Added by Antigravity
-export PATH="/Users/skarif/.antigravity/antigravity/bin:$PATH"
 
 # Homebrew OpenJDK 17
 export JAVA_HOME="/opt/homebrew/opt/openjdk@17"

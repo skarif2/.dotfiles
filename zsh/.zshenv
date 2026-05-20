@@ -13,11 +13,6 @@ if [[ -d "$HOME/.local/bin" ]]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
-# Antigravity bin
-if [[ -d "$HOME/.antigravity/antigravity/bin" ]]; then
-  export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
-fi
-
 # Volta (Node Version Manager) — shim-based, no shell hooks needed
 export VOLTA_HOME="$HOME/.volta"
 if [[ -d "$VOLTA_HOME/bin" ]]; then

@@ -202,12 +202,8 @@ automatically-unhide-macos-hidden-apps = false
   run = ['move-node-to-workspace Q']
 
 [[on-window-detected]]
-  if.app-id = 'com.google.antigravity'
-  run = ['move-node-to-workspace Q']
-
-[[on-window-detected]]
   if.app-id = 'dev.zed.Zed'
-  run = ['move-node-to-workspace T']
+  run = ['move-node-to-workspace Q']
 
 # Secondary monitor
 
@@ -222,6 +218,10 @@ automatically-unhide-macos-hidden-apps = false
 [[on-window-detected]]
   if.app-id = 'com.hnc.Discord'
   run = ['move-node-to-workspace D']
+
+[[on-window-detected]]
+  if.app-id = 'com.google.antigravity'
+  run = ['move-node-to-workspace F']
 
 [[on-window-detected]]
   if.app-id = 'md.obsidian'

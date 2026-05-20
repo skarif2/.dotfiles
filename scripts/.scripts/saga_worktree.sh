@@ -131,7 +131,7 @@ function _saga_check_repo() {
 
 function gwf() { 
     if ! _saga_check_repo "7m-frontend"; then return 1; fi
-    __saga_worktree_add_core --link ".env*" --link ".zed" "$@" || return 1
+    __saga_worktree_add_core --link ".env*" "$@" || return 1
     echo "🚀 Running vp install..."
     vp install
     echo "🚀 Starting dev server..."

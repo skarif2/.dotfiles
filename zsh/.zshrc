@@ -57,6 +57,11 @@ function dotfiles() {
     cd ~/.dotfiles && zed .
 }
 
+# GRIMOIRE (AI Knowledge Base)
+function grimoire() {
+    cd ~/GRIMOIRE && code .
+}
+
 # Standard git worktree
 function gw() {
     # If the first argument passed to gw is "add", run git fetch first

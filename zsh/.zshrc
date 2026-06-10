@@ -178,3 +178,10 @@ fi
 # Homebrew OpenJDK 17
 export JAVA_HOME="/opt/homebrew/opt/openjdk@17"
 export PATH="$JAVA_HOME/bin:$PATH"
+
+# MCP API keys — loaded from macOS Keychain
+export GITHUB_PERSONAL_ACCESS_TOKEN=$(security find-generic-password -a "$USER" -s "github-mcp-token" -w 2>/dev/null)
+export CONTEXT7_API_KEY=$(security find-generic-password -a "$USER" -s "context7-api-key" -w 2>/dev/null)
+
+# Context Mode MCP server custom path
+export CONTEXT_MODE_DIR="$HOME/GRIMOIRE/.context-mode"

@@ -1,27 +1,19 @@
 #!/usr/bin/env bash
-# Builds the folder portion of a tmux window label. No maps, all on the fly.
+# Builds the folder portion of a tmux window label. Prints: <color><TAB><label>
 #
-# Prints a single line:  <color><TAB><label>
-#
-#   Rule: build the FULL label first — "repo" or "repo/worktree" using full
-#   names. If it fits in MAXLEN (10) chars, show it untouched (".dotfiles" stays
-#   ".dotfiles", "backend" stays "backend"). Only when it's longer do we
-#   abbreviate: the repo collapses to its segment-initials code and the worktree
-#   is cut to WTMAX chars + an ellipsis:
+# Label: "repo" or "repo/worktree", shown in full if <= MAXLEN, else abbreviated
+# — repo collapses to segment-initials, worktree is cut to WTMAX + ellipsis:
 #       "frontend/shift-enter-issue-in-instance" -> "Fr/shift-e…"
 #       "control-conter"                          -> "CC"
-#
-#   color: a stable catppuccin colour derived from the project (repo/folder)
-#   name, so every worktree of a repo shares one colour and repos differ.
-#
-# Abbreviation rule (segment initials): split on -, _ and camelCase; take each
-# segment's first letter. Single-word names fall back to their first two letters
-# (+ any trailing digits, so "frontend2" -> "Fr2").
+# Segment initials: split on -, _ and camelCase, take each first letter; a single
+# word falls back to its first two chars + trailing digits ("frontend2" -> "Fr2").
+# Color: stable catppuccin accent hashed from the repo/folder name, so worktrees
+# of a repo share a colour and different repos differ.
 #
 # Usage: window_label.sh <path>
 
-# Force UTF-8 so multibyte handling is correct: tmux hooks invoke this under
-# LC_ALL=C, which makes bash mangle the "…" literal and any non-ASCII path.
+# tmux hooks invoke this under LC_ALL=C, which mangles the "…" literal and any
+# non-ASCII path; force UTF-8 so multibyte handling is correct.
 export LC_ALL=en_US.UTF-8
 
 MAXLEN=10   # show the full label untouched at or below this length

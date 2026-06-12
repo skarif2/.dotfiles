@@ -6,6 +6,16 @@ if command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
     tmux attach-session -t main 2>/dev/null || tmux new-session -s main
 fi
 
+# Keep the tmux window's folder label fresh on `cd`. The @dir tmux hooks only
+# fire on focus/new/split, so a bare directory change wouldn't update otherwise.
+if [[ -n "$TMUX" ]]; then
+    autoload -Uz add-zsh-hook
+    _tmux_refresh_dir() {
+        ~/.config/tmux/scripts/set_window_dir.sh "$(tmux display -p '#{window_id}')" &>/dev/null &!
+    }
+    add-zsh-hook chpwd _tmux_refresh_dir
+fi
+
 # ============================================================================
 # Basic Zsh Settings
 # ============================================================================
@@ -54,7 +64,7 @@ alias vim="nvim"
 
 # Dotfiles
 function dotfiles() {
-    cd ~/.dotfiles && zed .
+    cd ~/.dotfiles && code .
 }
 
 # GRIMOIRE (AI Knowledge Base)

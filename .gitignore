@@ -1,6 +1,12 @@
 # tmux plugins
 tmux/.config/tmux/plugins
 
+# zsh generated files (compiled plugins + completion dump, regenerated on shell start)
+# These land in the repo because ~/.config/zsh is a folded stow symlink.
+zsh/.config/zsh/.zcompdump*
+zsh/.config/zsh/.zsh_plugins.zsh
+zsh/.config/zsh/.zsh_plugins_late.zsh
+
 # macos files
 .DS_Store
 

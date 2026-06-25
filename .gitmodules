@@ -1,0 +1,3 @@
+[submodule "grimoire/docs"]
+	path = grimoire/docs
+	url = git@github.com:skarif2/grimoire-docs.git

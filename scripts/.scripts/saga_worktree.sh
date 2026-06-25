@@ -134,8 +134,8 @@ function gwf() {
     __saga_worktree_add_core --link ".env*" "$@" || return 1
     echo "🚀 Running vp install..."
     vp install
-    echo "🚀 Starting dev server..."
-    vp dev
+    echo "🤖 Starting claude..."
+    claude
 }
 
 function gwb() { 

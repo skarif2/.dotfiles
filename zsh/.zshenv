@@ -1,6 +1,11 @@
 # Zsh Environment Constants
 # These are loaded early, even for non-interactive shells
 
+# Point zsh at its XDG config dir. This is the one zsh file that must live at
+# $HOME (zsh reads ~/.zshenv before ZDOTDIR exists); everything else
+# (.zshrc, .zsh_fzf.zsh, .zsh_plugins.txt) lives under $ZDOTDIR.
+export ZDOTDIR="$HOME/.config/zsh"
+
 # Homebrew — use shellenv so PATH, MANPATH, and crucially fpath
 # (for zsh completions at /opt/homebrew/share/zsh/site-functions) are all set.
 # This must run before compinit so _brew and other Homebrew completers are found.

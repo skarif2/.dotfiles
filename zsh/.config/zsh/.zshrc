@@ -67,11 +67,6 @@ function dotfiles() {
     cd ~/.dotfiles && code .
 }
 
-# GRIMOIRE (AI Knowledge Base)
-function grimoire() {
-    cd ~/GRIMOIRE && code .
-}
-
 # Standard git worktree
 function gw() {
     # If the first argument passed to gw is "add", run git fetch first
@@ -84,11 +79,7 @@ function gw() {
 }
 
 # Directory listing
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    alias ls='ls -G'
-else
-    alias ls='ls --color=auto'
-fi
+alias ls='ls -G'
 alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
@@ -151,7 +142,7 @@ fi
 source ${zsh_plugins}_late.zsh
 
 # FZF config — sourced after fzf-tab is loaded so zstyles apply correctly
-source "$HOME/.dotfiles/zsh/.zsh_fzf.zsh"
+source "$ZDOTDIR/.zsh_fzf.zsh"
 
 # Override OMZ git plugin aliases that conflict with our own
 alias gg="lazygit"
@@ -198,5 +189,10 @@ export PATH="$JAVA_HOME/bin:$PATH"
 export GITHUB_PERSONAL_ACCESS_TOKEN=$(security find-generic-password -a "$USER" -s "github-mcp-token" -w 2>/dev/null)
 export CONTEXT7_API_KEY=$(security find-generic-password -a "$USER" -s "context7-api-key" -w 2>/dev/null)
 
+# GRIMOIRE (AI Knowledge Base)
+export GRIMOIRE="$HOME/.dotfiles/grimoire"
 # Context Mode MCP server custom path
-export CONTEXT_MODE_DIR="$HOME/GRIMOIRE/.context-mode"
+export CONTEXT_MODE_DIR="$GRIMOIRE/.context-mode"
+
+# Hermes Agent — ensure ~/.local/bin is on PATH
+export PATH="$HOME/.local/bin:$PATH"

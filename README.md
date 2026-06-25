@@ -1,6 +1,40 @@
 # .dotfiles
 
-Modern, cross-platform development environment configuration managed with [GNU Stow](https://www.gnu.org/software/stow/).
+Modern macOS development environment, provisioned by a single command and managed with [GNU Stow](https://www.gnu.org/software/stow/).
+
+## ⚡ One-command install
+
+A fresh Mac is provisioned end-to-end by a single command:
+
+```bash
+curl -fsSL https://skarif.dev/dotfiles/install.sh | bash
+```
+
+`setup.sh` installs the Xcode Command Line Tools and Homebrew, clones this repo
+to `~/.dotfiles`, then hands off to the orchestrator (`lib/orchestrate.sh`). It is
+idempotent, so the same command re-syncs an existing checkout.
+
+> **⚠️ Prerequisite: the redirect must be configured first.** The one-liner only
+> works once `skarif.dev/dotfiles/install.sh` is set up as an HTTP redirect (302)
+> to the entry script. This lives in **external infrastructure, not in this repo**:
+>
+> ```
+> https://skarif.dev/dotfiles/install.sh
+>   → https://raw.githubusercontent.com/skarif2/.dotfiles/main/setup.sh
+> ```
+>
+> The target is **`setup.sh`** (the entry script was renamed from `bootstrap.sh`).
+> Until this redirect exists and points at `…/main/setup.sh`, the command above
+> 404s. With no redirect yet, bootstrap directly from raw instead:
+>
+> ```bash
+> curl -fsSL https://raw.githubusercontent.com/skarif2/.dotfiles/main/setup.sh | bash
+> ```
+
+> **Two prompts are expected and intentional:** the macOS GUI dialog for the
+> Xcode Command Line Tools, and a one-time `sudo` password. App Store apps
+> additionally need you to be **signed in to the App Store** (see below); if you
+> are not, that step is logged as skipped and the run still completes.
 
 ## 📦 What's Inside
 
@@ -24,10 +58,9 @@ Modern, cross-platform development environment configuration managed with [GNU S
 - **[fd](https://github.com/sharkdp/fd)** — Fast, user-friendly alternative to `find`
 - **[ripgrep](https://github.com/BurntSushi/ripgrep)** — Blazing fast grep alternative
 
-### Custom Scripts
+### AI Agents
 
-- **Git worktree helpers** — Shortcuts for managing multiple working trees
-- **Project-specific utilities** — Custom workflows and automation
+- **[Claude Code](https://claude.com/claude-code)** and **[pi](https://pi.dev/)** — both pointed at the shared `grimoire/` vault (skills, prompts, `AGENTS.md`)
 
 ## 🎯 Why These Tools?
 
@@ -36,7 +69,7 @@ Modern, cross-platform development environment configuration managed with [GNU S
 ### Zsh Plugin Management with Antidote
 
 - **Performance**: Antidote compiles the plugin loading script statically, meaning zero overhead during startup compared to heavy frameworks like oh-my-zsh.
-- **Simplicity**: Manage plugins declaratively in a simple `~/.dotfiles/zsh/.zsh_plugins.txt` file.
+- **Simplicity**: Manage plugins declaratively in a simple `zsh/.config/zsh/.zsh_plugins.txt` file.
 - **Modern feel built-in**: We use essential plugins like `zsh-autosuggestions`, `fzf-tab`, and `zsh-syntax-highlighting` to get all the benefits of modern shells instantly, without the bloat.
 - **Built-in Shell**: Zsh is already the default shell on macOS.
 
@@ -53,160 +86,99 @@ Modern, cross-platform development environment configuration managed with [GNU S
 - **Universal**: Same prompt in Zsh, Bash, Fish, PowerShell
 - **Minimal by default**: Shows only relevant context (git status, Node version, etc.) — no ASCII art locomotives
 
-## 🛠️ Installation
+## 🛠️ How the install works
 
-### Prerequisites
+The one command above runs two layers. Both are idempotent: re-running pulls the
+latest repo and skips anything already in place.
 
-- **macOS**: Homebrew installed ([brew.sh](https://brew.sh/))
-- **Linux**: Your distro's package manager (apt, dnf, pacman, etc.)
+### 1. `setup.sh` (entry point)
 
-### Quick Start
+The single entry point, self-contained so it can run before the repo exists. It
+resolves a terminal handle for its prompts, installs the **Xcode Command Line
+Tools** (bounded poll) and **Homebrew**, installs **gum**, clones this repo
+**non-recursively** to `~/.dotfiles` (or pulls an existing checkout), then hands
+off to the orchestrator. The clone is non-recursive on purpose: the private
+`grimoire/docs` submodule is initialised later, once GitHub credentials exist.
+
+### 2. `lib/orchestrate.sh` (orchestrator)
+
+Sources the `lib/*.sh` modules and runs them in a **hard dependency order**.
+There is no `set -e`: each step runs under `run_step`, which records failures and
+keeps going, then the run ends with an explicit summary (one broken step is
+reported, never silently swallowed or allowed to abort the whole run).
+
+| Order | Module | What it does |
+|-------|--------|--------------|
+| 1 | `brew` | Installs the entire [`Brewfile`](Brewfile) (CLI formulae, GUI casks, the nerd font, taps) in one pass |
+| 2 | `stow` | Symlinks every config package into `$HOME` via GNU Stow |
+| 3 | `node-agents` | Volta + default Node, then Claude Code and pi |
+| 4 | `shell` | Antidote (zsh plugins) and TPM (tmux plugins) |
+| 5 | `secrets` | Prompts for MCP tokens (`github-mcp-token`, `context7-api-key`) and stores them in the login Keychain; each is skippable |
+| 6 | `wiring` | Runs `grimoire/setup-claude.sh` + `setup-pi.sh` (always), then initialises the private `grimoire/docs` submodule (gated on `gh` auth) |
+| 7 | `apps` | App Store apps via `mas` (failure-tolerant) |
+
+The order is load-bearing. In particular, **`stow` precedes `shell`** because
+`~/.config/tmux` and `~/.config/zsh` are *folded* stow symlinks into the repo, so
+anything that writes into them (TPM, antidote) must run after the symlinks exist;
+and **`secrets` precedes `wiring`** because the agents read the tokens it stores.
+
+### Symlinks (Stow)
+
+GNU Stow creates symlinks from `~/.dotfiles/` into your home directory, so edits
+in the repo apply immediately and a clean uninstall is `stow -D <package>`:
 
 ```bash
-# 1. Clone this repo to your home directory (works from anywhere)
-git clone https://github.com/YOUR_USERNAME/.dotfiles.git ~/.dotfiles
-
-# 2. Run the setup script (works from anywhere)
-bash ~/.dotfiles/setup.sh
-
-# 3. GUI Applications Installation (optional)
-# After running `setup.sh`, you can install all GUI applications with one command:
-bash ~/.dotfiles/apps/install.sh
-```
-
-This installs **20 applications** via Homebrew including:
-
-- Development tools (Antigravity, VS Code, Zed)
-- Browsers (Arc, Brave, Chrome, DuckDuckGo)
-- Productivity apps (Notion, Obsidian, Slack, Discord)
-- Utilities (Bitwarden, VLC, Ice, Sol, and more)
-
-See [`apps/README.md`](apps/README.md) for the complete list and manual installation instructions for apps not available via Homebrew.
-
-### What `setup.sh` Does
-
-The setup script automates the entire installation process:
-
-#### 1. **Platform Detection**
-
-Detects macOS or Linux and adjusts behavior accordingly.
-
-#### 2. **Tool Installation** (macOS only)
-
-On macOS, automatically installs all required tools via Homebrew:
-
-- CLI tools: `stow`, `starship`, `carapace`, `nvim`, `tmux`, `fzf`, `fd`, `rg`
-- GUI apps: AeroSpace, Ghostty, JetBrains Mono Nerd Font
-
-On Linux, it checks for missing tools and prompts you to install them manually using your package manager.
-
-#### 3. **Symlink Creation (Stow)**
-
-Uses GNU Stow to create symlinks from `~/.dotfiles/` to your home directory:
-
-``` bash
-~/.dotfiles/zsh/.zshrc                   →  ~/.zshrc
-~/.dotfiles/zsh/.zshenv                  →  ~/.zshenv
-~/.dotfiles/nvim/.config/nvim/init.lua   →  ~/.config/nvim/init.lua
-~/.dotfiles/tmux/.config/tmux/tmux.conf  →  ~/.config/tmux/tmux.conf
+~/.dotfiles/zsh/.config/zsh/.zshrc        →  ~/.config/zsh/.zshrc
+~/.dotfiles/nvim/.config/nvim/init.lua    →  ~/.config/nvim/init.lua
+~/.dotfiles/tmux/.config/tmux/tmux.conf   →  ~/.config/tmux/tmux.conf
 ...
 ```
 
-This means:
+### Agent wiring & the private submodule
 
-- ✅ Edit files in `~/.dotfiles/` and changes apply immediately
-- ✅ Easy to version control
-- ✅ Clean uninstall: `stow -D <package>` removes all symlinks
+`setup-claude.sh` and `setup-pi.sh` are **auth-free** and always run: they only
+symlink `skills/`, `prompts/`, and `AGENTS.md` out of this **public** repo and
+write local settings. Only the **private** `grimoire/docs` submodule needs
+credentials, so it is gated separately: if `gh auth status` fails you are
+prompted to `gh auth login`; declining skips just the submodule, leaving the
+agent wiring intact. (A green `gh auth status` alone does not configure git's
+HTTPS helper, so `gh auth setup-git` runs before the submodule clone.)
 
-#### 4. **Zsh Plugins**
+### App Store apps
 
-Instead of using a bulky framework or manually cloning repositories, we use [Antidote](https://getantidote.github.io/) to manage and statically compile Zsh plugins for maximum performance.
+[`Amphetamine`](https://apps.apple.com/app/id937984704) and
+[`Second Clock`](https://apps.apple.com/app/id6450279539) install via `mas`. This
+step needs you to be **signed in to the App Store** (`mas` cannot sign in for
+you). If you are not signed in, the step logs each app as skipped and the run
+still completes — sign in and re-run to pick them up.
 
-The plugins are defined in `~/.dotfiles/zsh/.zsh_plugins.txt` and include:
+### Post-install
 
-**Essential Features**:
-- `zsh-autosuggestions`: Fish-like autocomplete via ghost text
-- `zsh-syntax-highlighting`: Highlights valid/invalid commands as you type
-- `zsh-completions`: Additional completion definitions
-- `fzf-tab`: Replaces Zsh's default completion menu with fzf
-
-**Oh My Zsh Features (extracted via Antidote)**:
-- `git`: Useful git aliases and functions
-- `sudo`: Press `<Esc><Esc>` to prefix your current command with `sudo`
-- `aws` and `command-not-found`
-
-**Keybindings & Movement**:
-- `zsh-vi-mode`: A better Vi-mode implementation for Zsh
-- `zsh-history-substring-search`: Type part of a command and press up/down to search history
-
-Antidote reads `.zsh_plugins.txt` and compiles it into a static file (`~/.zsh_plugins.zsh`) for lightning-fast loading in your `.zshrc`.
-
-#### 5. **Volta Installation**
-
-Installs [Volta](https://volta.sh/) using its official installer:
-
-```bash
-curl https://get.volta.sh | bash -s -- --skip-setup
-```
-
-The `--skip-setup` flag prevents it from modifying shell profiles (we handle PATH in our configs).
-
-#### 6. **Tmux Plugin Manager (TPM)**
-
-Clones [TPM](https://github.com/tmux-plugins/tpm) to `~/.config/tmux/plugins/tpm` for managing Tmux plugins.
-
-### Post-Installation
-
-1. **Restart your shell** or open a new terminal (the classic "turn it off and on again")
-2. **Install Node.js** via Volta:
-
-   ```bash
-   volta install node@22
-   ```
-
-3. **Install Tmux plugins**: Press `Ctrl+Space` then `I` (capital i) inside Tmux
+1. **Restart your shell** or open a new terminal.
+2. **Install a Node version** via Volta if you need a specific one: `volta install node@22`.
+3. **Install Tmux plugins**: press `Ctrl+Space` then `I` (capital i) inside Tmux.
 
 ## 🍴 Forking & Customization
 
-This repo is designed to be forked and personalized. Here's how:
+This repo is designed to be forked and personalized.
 
-### 1. Fork the Repository
-
-Click "Fork" on GitHub, then clone your fork:
-
-```bash
-git clone https://github.com/YOUR_USERNAME/.dotfiles.git ~/.dotfiles
-```
-
-### 2. Customize Configs
+### Customize Configs
 
 Each directory is a "stow package" containing config files:
 
 ```bash
 .dotfiles/
-├── zsh/                   # Zsh configuration
-│   ├── .zshrc             # Interactive shell settings
-│   └── .zshenv            # Environment variables
-├── nvim/
-│   └── .config/nvim/      # Your Neovim config
-├── starship/
-│   └── .config/starship/
-│       └── starship.toml  # Prompt customization
-├── tmux/
-│   └── .config/tmux/
-│       └── tmux.conf      # Tmux keybindings & plugins
+├── zsh/                   # Zsh configuration (ZDOTDIR layout under .config/zsh)
+├── nvim/                  # Neovim config
+├── starship/              # Starship prompt config
+├── tmux/                  # Tmux keybindings & plugins
 └── ...
 ```
 
-**To customize**:
+Edit files directly in `~/.dotfiles/<package>/.config/...`; changes apply
+immediately through the symlinks. Commit and push to your fork.
 
-- Edit files directly in `~/.dotfiles/<package>/.config/...`
-- Changes apply immediately (symlinks!)
-- Commit and push to your fork
-
-### 3. Add Your Own Packages
-
-Create a new directory for any tool:
+### Add Your Own Package
 
 ```bash
 mkdir -p ~/.dotfiles/myapp/.config/myapp
@@ -214,118 +186,49 @@ echo "my_setting = true" > ~/.dotfiles/myapp/.config/myapp/config.toml
 cd ~/.dotfiles && stow myapp
 ```
 
-Now `~/.config/myapp/config.toml` is symlinked and version-controlled.
-
-### 4. Remove Unwanted Tools
-
-Don't use Tmux? No judgment. Just delete the directory:
+### Remove a Tool
 
 ```bash
 cd ~/.dotfiles
-stow -D tmux          # Remove symlinks
-rm -rf tmux/          # Delete the package
+stow -D tmux          # remove symlinks
+rm -rf tmux/          # delete the package
 ```
 
-Update `setup.sh` to remove it from `REQUIRED_CMDS` array.
-
-### 5. Platform-Specific Configs
-
-Use conditional logic in configs:
-
-Use conditional logic in configs:
-
-**Zsh** (`.zshrc`):
-
-```bash
-if [[ "$(uname)" == "Darwin" ]]; then
-    # macOS-specific PATH additions
-fi
-```
-
-**Tmux** (`tmux.conf`):
-
-```bash
-if-shell "uname | grep -q Darwin" \
-    "set -g status-position top" \
-    "set -g status-position bottom"
-```
+Then drop its entry from the [`Brewfile`](Brewfile).
 
 ## 📁 Repository Structure
 
 ```bash
 .dotfiles/
-├── .gitignore           # Ignore history files, plugins, .DS_Store
-├── .stowrc              # Stow config (sets target to ~/)
-├── README.md            # This file
-├── setup.sh             # Automated installation script
+├── setup.sh             # Single entry point (served via the redirect; also re-syncs)
+├── Brewfile             # Declarative brew formulae, casks, font, taps
+├── .stowrc              # Stow config (target = ~/)
+├── lib/                 # orchestrate.sh + the mod_* modules (brew, stow, …)
+├── grimoire/            # AI agent vault + setup-claude.sh / setup-pi.sh
 │
-├── apps/                # GUI application installation (not stowed)
-│   ├── install-apps.sh  # Install all apps via Homebrew
-│   └── README.md        # App list and installation guide
-│
-├── aerospace/           # AeroSpace window manager (macOS)
+├── aerospace/           # AeroSpace window manager
 ├── ghostty/             # Ghostty terminal config
-├── zsh/                 # Zsh shell config
-├── nvim/                # Neovim editor config
-├── scripts/             # Custom shell scripts
-├── starship/            # Starship prompt config
-└── tmux/                # Tmux terminal multiplexer config
+├── zsh/ · nvim/ · tmux/ · starship/   # stow packages
+└── scripts/             # Custom shell scripts
 ```
-
-## 🐧 Linux Compatibility
-
-The setup script detects Linux and:
-
-- ✅ Checks for required tools
-- ✅ Stows all packages correctly
-- ✅ Installs Volta and TPM
-- ⚠️ **Does NOT auto-install tools** (lists what's missing)
-
-**Manual installation example (Ubuntu/Debian)**:
-
-```bash
-sudo apt update
-sudo apt install stow zsh neovim tmux fzf fd-find ripgrep
-```
-
-**Note**: Some package names differ by distro:
-
-- `fd` → `fd-find` on Debian/Ubuntu
-- Fonts install to `~/.local/share/fonts/` manually
 
 ## 🔧 Maintenance
 
-### Update All Tools (macOS)
+### Update everything
 
 ```bash
 brew update && brew upgrade
 ```
 
-### Update Tmux Plugins
+### Sync dotfiles across machines
+
+```bash
+bash ~/.dotfiles/setup.sh   # idempotent: pulls latest, re-runs, skips what's done
+```
+
+### Update Tmux plugins
 
 Press `Ctrl+Space` then `U` inside Tmux.
-
-### Sync Dotfiles Across Machines
-
-```bash
-cd ~/.dotfiles
-git pull                 # Pull latest changes
-bash setup.sh               # Re-run setup (idempotent)
-```
-
-### Backup Before Major Changes
-
-```bash
-cd ~/.dotfiles
-git checkout -b backup-$(date +%Y%m%d)
-# Make changes...
-git add . && git commit -m "Experimental changes"
-# (Future you will thank present you)
-```
-
-## 🤝 Contributing
-
-Found a bug or have a suggestion? Open an issue or PR! This repo is meant to be a starting point — fork it, break it, make it yours. That's the whole point.
 
 ## 📝 License
 

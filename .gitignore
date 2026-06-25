@@ -7,6 +7,9 @@ zsh/.config/zsh/.zcompdump*
 zsh/.config/zsh/.zsh_plugins.zsh
 zsh/.config/zsh/.zsh_plugins_late.zsh
 
+# grimoire is ignored globally (~/.config/git/ignore), but in this repo it's tracked
+!grimoire/
+
 # macos files
 .DS_Store
 

@@ -125,21 +125,18 @@ The final wrap-up step, after distillation and the doc-commit proposal. Both art
 
 ### 2. Daily-update message
 
-Also produce a short **daily-update** message (think standup) for the user to paste. Keep it in the **same style as `/review`'s approval message** so the two feel consistent:
+Also produce a short **daily-update** message (think standup) for the user to paste. Keep it in the **same style as `/review`'s daily update** so the two feel consistent:
 
-- **1-2 lines, plain and simple English.** Friendly, direct, no jargon, no section headers, no bullet lists.
+- **Plain and simple English.** Friendly, direct, no jargon, no section headers, no bullet lists.
 - **Never mention CI, checks, pipelines, or build status.**
-- Describe what got done today and its purpose, at a high level, not a file-by-file log.
+- **Lead with the PR title** (the `pr.md` title just drafted), then say what the PR actually does in **1-2 lines** so a reader who never opened it knows what changed and why. Draw it from the run's cumulative diff and the plan `Goal:`/`Notes:`, not a file-by-file log. Append `(#<num>)` only if a PR number already exists; otherwise omit it.
 
 Present it in its own fenced block, clearly labelled as the thing to paste:
 
 ```
 Daily update (paste in standup):
-> Wrapped up <thing>, so <the user-facing or technical payoff>.
-> Picking up <next thing> next.
+> Wrapped up <PR title>. <1-2 lines on what changed and the user-facing or technical payoff>.
 ```
-
-(Drop the second line when there is no clear next step.)
 
 ## Propose commit(s)
 

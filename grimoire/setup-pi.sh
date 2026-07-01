@@ -13,8 +13,10 @@ mkdir -p "$AGENT"
 
 link() {
   local src="$1" dst="$2"
-  if [ -L "$dst" ]; then
+  if [ -L "$dst" ] && [ "$(readlink "$dst")" = "$src" ]; then
     echo "  skip (already linked): $dst"
+  elif [ -L "$dst" ]; then
+    ln -sf "$src" "$dst" && echo "  relinked: $dst → $src (was $(readlink "$dst"))"
   elif [ -e "$dst" ]; then
     echo "  backup: $dst → ${dst}.bak"
     mv "$dst" "${dst}.bak"

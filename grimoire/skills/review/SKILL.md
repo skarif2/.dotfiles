@@ -391,19 +391,25 @@ Approval message (paste on the PR):
 
 Regardless of verdict, also produce a short **daily-update** message (think standup) for the user to paste, drawn from what this review covered. Keep it in the **same style as the approval message** above so the two feel consistent (and it matches `/gg`'s daily update):
 
-- **1-2 lines, plain and simple English.** Friendly, direct, no jargon, no section headers, no bullet lists.
+- **Plain and simple English.** Friendly, direct, no jargon, no section headers, no bullet lists.
 - **Never mention CI, checks, pipelines, or build status.**
-- Describe what you reviewed today and the upshot, at a high level, not a finding-by-finding log. Frame an Approve as done/cleared; frame Request changes / Needs discussion as "reviewed, sent feedback".
+- **Lead with the PR title verbatim and its number**, then say what the PR actually does in **1-2 lines** so a reader who never opened it knows what changed and why. Pull this from the diff/description, not a finding-by-finding log.
+- **Approve** → `Reviewed and approved <PR title> (#<num>). <1-2 lines on what changed and why>.`
+- **Request changes / Needs discussion** → a **single line**: `Reviewed <PR title> (#<num>), sent feedback on <the gist>.`
 
 Present it in its own fenced block, clearly labelled as the thing to paste:
 
 ```
 Daily update (paste in standup):
-> Reviewed <thing>, looks good and good to merge.
-> Picking up <next thing> next.
+> Reviewed and approved <PR title> (#<num>). <1-2 lines on what changed and why>.
 ```
 
-(Drop the second line when there is no clear next step.)
+For a Request changes / Needs discussion verdict, it collapses to one line:
+
+```
+Daily update (paste in standup):
+> Reviewed <PR title> (#<num>), sent feedback on <the gist>.
+```
 
 </daily-update>
 

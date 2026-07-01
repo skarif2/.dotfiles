@@ -29,6 +29,11 @@ if [[ -d "$HOME/.vite-plus/bin" ]]; then
   export PATH="$HOME/.vite-plus/bin:$PATH"
 fi
 
+# Rust toolchain (rustup, shim-based)
+if [[ -d "$HOME/.cargo" ]]; then
+  export PATH="$HOME/.cargo/bin:$PATH"
+fi
+
 # Node Configuration
 export NODE_OPTIONS="--max-old-space-size=8192"
 
@@ -37,3 +42,4 @@ export EDITOR="nvim"
 
 # Starship Configuration Path
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+. "$HOME/.cargo/env"

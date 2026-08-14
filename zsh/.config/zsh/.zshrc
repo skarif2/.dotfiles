@@ -196,3 +196,6 @@ export CONTEXT_MODE_DIR="$GRIMOIRE/.context-mode"
 
 # Hermes Agent — ensure ~/.local/bin is on PATH
 export PATH="$HOME/.local/bin:$PATH"
+
+# opencode
+export PATH=/Users/skarif/.opencode/bin:$PATH

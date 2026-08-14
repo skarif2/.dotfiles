@@ -13,6 +13,6 @@ The skill will:
 4. Ask clarifying questions one at a time
 5. Optionally create an ADR or update context if warranted
 6. **Draft the full plan in chat and refine it in a loop**, make changes until you approve; nothing is written to disk yet
-7. Only on approval ("save" / "looks good" / `/gg`), write the plan to `$GRIMOIRE/docs/[group]/[project]/plans/[date]-[task-slug].md` and index it
+7. Only on approval ("save" / "looks good" / `/gg`), write the plan to `<repo-root>/grimoire/plan.md` (one active plan per repo/worktree, gitignored, `@`-mentionable) and index it
 
 Do not write any application code. Knowledge files (ADRs, context) may be created during the interview. The plan file itself is written only after you approve the draft.

@@ -368,8 +368,10 @@ Skip indexing if the review found only one-off issues with no reusable signal.
 
 When the verdict is **Approve**, also produce a short, copy-pasteable **approval message** for the user to post on the PR, separate from the saved review file. (Skip this entirely for "Request changes" / "Needs discussion".)
 
+**Write it through the `arif-voice` skill.** That skill owns how it sounds; the rules below own what goes in it. This one gets posted on GitHub under his name, so voice matters more here than anywhere else in the review.
+
 Rules:
-- **1–2 lines, plain and simple English.** Friendly, direct, no jargon, no section headers, no bullet lists.
+- **1 to 2 lines.** No section headers, no bullet lists.
 - **Never mention CI, checks, pipelines, or build status.**
 - If the PR is clean (no issues worth raising), just the approval line, nothing else.
 - If there are leftover **Minor/Nit** findings **or a pending Copilot / other review** not yet resolved, still approve, then add **one** `NOTE:` line framing them as a nice-to-have or follow-up, explicitly not a blocker. (Critical or Major findings mean the verdict is not Approve, so they never appear here.)
@@ -389,10 +391,10 @@ Approval message (paste on the PR):
 
 <daily-update>
 
-Regardless of verdict, also produce a short **daily-update** message (think standup) for the user to paste, drawn from what this review covered. Keep it in the **same style as the approval message** above so the two feel consistent (and it matches `/gg`'s daily update):
+Regardless of verdict, also produce a short **daily-update** message (think standup) for the user to paste, drawn from what this review covered. **Write it through the `arif-voice` skill**, same as the approval message above and `/gg`'s daily update.
 
-- **Plain and simple English.** Friendly, direct, no jargon, no section headers, no bullet lists.
 - **Never mention CI, checks, pipelines, or build status.**
+- No section headers, no bullet lists. It is one short paragraph.
 - **Lead with the PR title verbatim and its number**, then say what the PR actually does in **1-2 lines** so a reader who never opened it knows what changed and why. Pull this from the diff/description, not a finding-by-finding log.
 - **Approve** → `Reviewed and approved <PR title> (#<num>). <1-2 lines on what changed and why>.`
 - **Request changes / Needs discussion** → a **single line**: `Reviewed <PR title> (#<num>), sent feedback on <the gist>.`

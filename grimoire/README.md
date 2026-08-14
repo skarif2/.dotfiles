@@ -17,10 +17,11 @@ GRIMOIRE/
 │   │       ├── index.md            ← the MAP: catalog of distilled pages, read first
 │   │       │  ── distilled wiki (durable, interlinked, loaded on every task) ──
 │   │       ├── context/ · adr/ · concepts/ · components/ · lessons/ · gotchas.md
-│   │       │  ── raw sources (episodic, dated, write-once, inputs to distillation) ──
-│   │       ├── handoffs/       ← from /handoff - deleted after /plan supersedes it (with confirmation)
-│   │       ├── plans/          ← active; plans/archived/ when done via /gg
-│   │       └── reviews/
+│   │       │  ── raw source, central ──
+│   │       └── handoffs/       ← from /handoff, deleted after /plan supersedes it (with confirmation)
+│
+│   raw sources also live LOCALLY per repo, gitignored and @-mentionable:
+│   <repo-root>/grimoire/plan.md · review.md · pr.md
 ├── skills/             ← reusable agent skills (grill-plan, review, improve-architecture, handoff, adversary, lint)
 ├── templates/          ← format templates for index, ADRs, plans, reviews, context, concepts, components, lessons, gotchas, handoffs
 ├── prompts/            ← slash commands (symlinked as commands/ for Claude)

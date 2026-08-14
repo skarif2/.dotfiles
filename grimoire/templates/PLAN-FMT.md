@@ -1,8 +1,10 @@
 # Plan File Format
 
-Plan files live in `docs/[group]/[project]/plans/`. Use file naming `[date]-[task-slug].md` where the task slug is derived from the plan title (lowercase, hyphenated, max 40 chars).
+The plan is a **single local working file** at `<repo-root>/grimoire/plan.md` (`$RAW_ROOT/plan.md`), gitignored and `@`-mentionable. There is **one active plan per repo/worktree**, so there is no dated filename and no dedup. Create the `grimoire/` directory lazily, only when the first plan is written.
 
-Create the `plans/` directory lazily, only when the first plan is written. Keep at most 5 active plan files. When a task is done, delete the plan or move it to `plans/archived/` if it documents a significant approach worth keeping.
+When the repo *is* the GRIMOIRE toolkit itself, `$RAW_ROOT` falls back to `$DOCS_ROOT` so raw files never land inside the toolkit.
+
+`/gg` **prunes** the plan on Done. Anything worth keeping is carried into the distilled wiki by distillation, not by keeping the plan file around.
 
 ## Template
 

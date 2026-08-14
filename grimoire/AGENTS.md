@@ -1,170 +1,169 @@
-## OS & Environment Setup
-Assume macOS for terminal commands, paths, operations. Default `zsh`. Use Homebrew (`brew`) for system packages.
+# Working with Arif
 
-## Project Knowledge Structure
+## About me
 
-All project-specific knowledge lives under `$GRIMOIRE/docs/`, mirroring the `~/Projects/` folder structure. See `$GRIMOIRE/templates/PROJECT-INIT.md` for the full path detection spec and lazy folder creation rules.
+Fazlul Haque Arif, call me Arif. Software engineer, 11+ years.
+Senior SWE at Craftsmen Ltd (craftsmensoftware.com), 7 years.
+Craftsmen: software team extension for companies in Europe, UK, US.
+I work with Saga (saganews.com), a Norwegian team under Fonn Group (fonngroup.com).
+
+Assume I know my stuff. Skip basics.
+
+## How to talk to me
+
+**No dashes as punctuation.** No em dash (U+2014), no en dash (U+2013), no `--`. Chat, code, commits, plans, reviews, ADRs, PR text, everything you write for me. Use a comma, colon, parentheses, or end the sentence. Hard rule, no exceptions. Not punctuation, so fine: `--verbose`, CSS custom properties, `i--`.
+
+**ASCII only** in files you write for me. No box-drawing, no arrows, no typographic quotes, no middots. Draw trees with indentation. Write `->` and `<-` if you need an arrow.
+
+- Answer first. No "Great question", no preamble, no restating the question.
+- Short unless I ask for depth.
+- No closing summary of what you just said. Stop when the answer is done.
+- Prose by default. Bullets only for real lists.
+- Say "I don't know" plainly. Never guess to fill the gap.
+
+> Claude Code only (PI ignores): `AskUserQuestion` labels max 5 words, descriptions max 1 sentence, never raw tool output in options. The box is harness-rendered and unthemeable, so readability is all content.
+
+## Code
+
+- No comments unless necessary. A comment explains *why*, never *what*. Max 3 lines.
+- Show the tradeoff you rejected, not just the one you picked.
+
+# GRIMOIRE
+
+## OS
+
+macOS, `zsh`, Homebrew (`brew`) for system packages.
+
+## Project knowledge structure
+
+Lives under `$GRIMOIRE/docs/`, mirroring `~/Projects/`. Path detection and lazy folder rules: `$GRIMOIRE/templates/PROJECT-INIT.md`.
 
 ```
 $GRIMOIRE/docs/
-├── {group}/                    ← e.g. saga, craftsmen, personal
-│   ├── index.md · context/ · adr/ · concepts/   ← group-level shared distilled pages
-│   └── {project}/              ← e.g. frontend, netcheck, adlc
-│       ├── index.md            ← MAP, catalog of distilled pages; READ FIRST, then drill in
-│       │   ── distilled wiki (durable, interlinked, read on every task) ──
-│       ├── context/ · adr/ · concepts/ · components/ · lessons/ · gotchas.md
-│       │   ── raw sources (episodic, dated, write-once; inputs to distillation) ──
-│       ├── handoffs/           ← ideas from /handoff, deleted after /plan supersedes it (with confirmation)
-│       ├── plans/              ← active tasks only (≤5); archived/ when done via /gg
-│       └── reviews/
+  {group}/                  saga, craftsmen, personal
+    index.md, context/, adr/, concepts/     group-level shared distilled pages
+    {project}/              frontend, netcheck, adlc
+      index.md              the MAP. Catalog of distilled pages. READ FIRST, then drill in
+      [distilled wiki: durable, interlinked, read every task]
+      context/, adr/, concepts/, components/, lessons/, gotchas.md
+      [raw source, central]
+      handoffs/             from /handoff, deleted once /plan supersedes it (confirm first)
+
+<repo-root>/grimoire/       raw sources. Repo/worktree-local, gitignored, @-mentionable
+  plan.md                   one active plan per repo/worktree. /gg prunes it on Done
+  review.md                 /review overwrites each run
+  pr.md                     /gg overwrites each run
 ```
 
-Key variables (derived from the current working directory):
-- `DOCS_ROOT`, path to project-specific docs (e.g. `$GRIMOIRE/docs/saga/frontend`)
-- `SHARED_ROOT`, path to group-level shared pool (e.g. `$GRIMOIRE/docs/saga`)
-- `PROJECT_ID`, identifier used for ctx labels (e.g. `saga/frontend`)
+Vars, derived from cwd:
+- `DOCS_ROOT` project docs, `$GRIMOIRE/docs/saga/frontend`
+- `SHARED_ROOT` group pool, `$GRIMOIRE/docs/saga`
+- `RAW_ROOT` repo-local raw, `<repo-root>/grimoire`, falls back to `DOCS_ROOT` when the repo *is* the toolkit
+- `PROJECT_ID` ctx label, `saga/frontend`
 
-At the start of any session:
-1. **Read `$DOCS_ROOT/index.md` first**, the map. Pick relevant distilled pages by their one-line summaries, then open only those (follow their `[[wikilinks]]`). This precedes loading raw files and is cheaper than scanning everything.
-2. Load `$DOCS_ROOT/context/`, `$DOCS_ROOT/adr/` and the pages the index pointed to; also `$SHARED_ROOT/index.md` + `$SHARED_ROOT/context/` + `$SHARED_ROOT/adr/`.
-3. Query indexed knowledge: `ctx_search(queries: ["[task keywords]"], source: "$PROJECT_ID")`, secondary to the index, not a replacement for it.
+Session start:
+1. **Read `$DOCS_ROOT/index.md` first.** It is the map. Pick pages by their one-line summaries, open only those, follow their `[[wikilinks]]`. Cheaper than scanning everything.
+2. Load `$DOCS_ROOT/context/`, `$DOCS_ROOT/adr/`, the pages the index pointed to. Same for `$SHARED_ROOT/index.md`, `context/`, `adr/`.
+3. `ctx_search(queries: ["<task keywords>"], source: "$PROJECT_ID")`. Secondary to the index, not a replacement.
 
-## Knowledge Indexing
+## Knowledge indexing
 
-Skills index files when they create them. Source label uses `PROJECT_ID` format (e.g. `saga/frontend`):
+Skills index files as they create them. Label is `$PROJECT_ID:<suffix>` (e.g. `saga/frontend:adr`).
 
-- Plans → `source: "$PROJECT_ID:plans"`
-- ADRs → `source: "$PROJECT_ID:adr"`
-- Context terms → `source: "$PROJECT_ID:context"`
-- Concepts → `source: "$PROJECT_ID:concepts"`
-- Components → `source: "$PROJECT_ID:components"`
-- Lessons → `source: "$PROJECT_ID:lessons"`
-- Gotchas → `source: "$PROJECT_ID:gotchas"`
-- Index → `source: "$PROJECT_ID:index"`
-- Review patterns → `source: "$PROJECT_ID:patterns"`
-- Review summaries → `source: "$PROJECT_ID:reviews"`
-- Handoffs → `source: "$PROJECT_ID:handoffs"`
+Suffixes: `plans` `adr` `context` `concepts` `components` `lessons` `gotchas` `index` `handoffs`, plus `patterns` (review patterns) and `reviews` (review summaries).
+
+`:plans` and `:reviews` index local files that do not persist: `plan.md` is pruned on Done, `review.md` is overwritten every run. Chunks outlive the file. Treat those hits as history, not truth, and confirm against the live file or the wiki before acting. `/reindex` rebuilds from disk.
 
 ## Templates
 
-Before writing any knowledge file, load the relevant format template from `$GRIMOIRE/templates/`:
+Load the matching format template from `$GRIMOIRE/templates/` before writing any knowledge file: `INDEX-FMT` `ADR-FMT` `CONTEXT-FMT` `CONCEPT-FMT` `COMPONENT-FMT` `LESSON-FMT` `GOTCHA-FMT` `HANDOFF-FMT` `PLAN-FMT` `REVIEW-FMT` (all `.md`).
 
-| File type | Template |
-|---|---|
-| Index | `INDEX-FMT.md` |
-| ADR | `ADR-FMT.md` |
-| Context file | `CONTEXT-FMT.md` |
-| Concept | `CONCEPT-FMT.md` |
-| Component | `COMPONENT-FMT.md` |
-| Lesson | `LESSON-FMT.md` |
-| Gotcha | `GOTCHA-FMT.md` |
-| Handoff | `HANDOFF-FMT.md` |
-| Plan | `PLAN-FMT.md` |
-| Review | `REVIEW-FMT.md` |
+## Compiled wiki layer
 
-## Compiled Wiki Layer
+Two layers, hard boundary (Karpathy's LLM-wiki pattern).
 
-GRIMOIRE has two layers with a hard boundary (Karpathy's LLM-wiki pattern):
+**Raw sources.** Episodic inputs to distillation. **Never listed in `index.md`.**
+- Local, in-repo, gitignored, `@`-mentionable: `$RAW_ROOT/plan.md` (one active plan per repo/worktree, pruned on Done), `review.md` and `pr.md` (overwritten each run; for a PR, GitHub is the durable record). Written by `/plan`, `/gg`, `/review`.
+- Central: `$DOCS_ROOT/handoffs/`, many per project, deleted when a plan is created. Written by `/handoff`.
 
-- **Raw sources**, episodic inputs to distillation, **never listed in `index.md`**. Two homes:
-  - **Plans and reviews are local single working files** in the project so you can `@`-mention them: `<repo-root>/grimoire/plan.md` and `<repo-root>/grimoire/review.md` (gitignored, anchored at the git repo/worktree root; fall back to central docs when the repo *is* the GRIMOIRE toolkit). The plan is **pruned on Done**; the review is **overwritten** each run (for a PR, GitHub is the durable record). Written by `/plan`, `/gg`, `/review`.
-  - **Handoffs stay central** in `$GRIMOIRE/docs/{project}/handoffs/` (multiple per project, deleted when a plan is created). Written by `/handoff`.
-- **Distilled wiki**, `context/`, `adr/`, `concepts/`, `components/`, `lessons/`, `gotchas.md`. Durable, interlinked, kept current. This is what the AI loads on future work. Compiled *from* raw sources.
-- **The map**, `index.md`. Catalogs every distilled page with a one-line summary. Read first.
+**Distilled wiki.** `context/` `adr/` `concepts/` `components/` `lessons/` `gotchas.md`. Durable, interlinked, kept current. Compiled *from* raw sources. This is what future sessions load.
 
-**Distillation** happens at ticket close, folded into `/gg` (after execution) and `/review` (after a review): read the raw source just produced, then **draft** new/updated distilled pages + `index.md` entries + backlinks, and **present them for the user to confirm** before writing. Never auto-write the wiki, drafts are confirmed (avoids stale synthesis masquerading as truth).
+**Map.** `index.md`. Every distilled page, one line each. Read first.
 
-**Every distilled page must have:**
-- **Provenance**, a `Source:` line that **names** the originating plan/branch/task (plain text, *not* a `[[link]]`; raw plan/review files are local and pruned, so a link would dangle) plus durable anchors (`file:line`/PR/commit).
-- **Freshness**, `Status:` (current | needs-verification | stale) + `Updated:` date.
-- **Wikilinks**, `[[concept_slug]]`, `[[component_slug]]`, `[[adr_slug]]`, `[[gotchas#heading]]`. A page with no inbound or outbound links is an orphan (lint flags it).
-- **An `index.md` entry**, added in the same pass that creates the page.
+**Distillation** runs at ticket close, inside `/gg` and `/review`: read the raw source just produced, **draft** new/updated pages plus `index.md` entries plus backlinks, **present for confirmation**. Never auto-write the wiki. The failure mode is stale synthesis masquerading as truth.
 
-**Naming:** `concept_{slug}.md`, `component_{slug}.md`, `lesson_{slug}.md`, `adr_{slug}.md`, `context_{slug}.md`; gotchas are `###` entries inside one `gotchas.md`.
+Every distilled page carries:
+- `Source:` naming the originating plan/branch/task as plain text, **not** a `[[link]]` (raw files get pruned, the link would dangle), plus durable anchors (`file:line`, PR, commit).
+- `Status:` current | needs-verification | stale, and `Updated:` date.
+- Wikilinks: `[[concept_slug]]` `[[component_slug]]` `[[adr_slug]]` `[[gotchas#heading]]`. No inbound or outbound link means orphan, lint flags it.
+- An `index.md` entry, written in the same pass.
+
+Naming: `concept_{slug}.md` `component_{slug}.md` `lesson_{slug}.md` `adr_{slug}.md` `context_{slug}.md`. Gotchas are `###` entries inside one `gotchas.md`.
 
 ## Phased plans
 
-A big ticket can be planned as dependency-ordered **phases** and executed one phase per session with a clean context. A plan is phased **only** when it contains a literal `## Phases` section: detection is **structural**, never a keyword in prose. No `## Phases` section means single-phase.
+Phased **only** when the plan holds a literal `## Phases` section. Detection is structural, never a keyword in prose. No section means single-phase.
 
-Each phase carries `**Depends on:**`, `**Status:** pending | done`, `**Baseline:**`, and `**Notes:**` plus its own `verify:`-bearing task list (see `templates/PLAN-FMT.md`). `/gg` runs the flow:
+Each phase carries `**Depends on:**`, `**Status:** pending | done`, `**Baseline:**`, `**Notes:**`, and its own `verify:`-bearing task list (`templates/PLAN-FMT.md`). One phase per session, clean context.
 
-- **One ready phase per session.** It picks the first `pending` phase whose dependencies are all `done`, runs it, and stops with a resume handoff (`/compact` or a new session, then `/gg <plan>`), since a skill cannot auto-compact.
-- **Working-tree baselines.** At phase start `/gg` snapshots the full working tree (untracked included) into a scratch index without touching the user's real index, then anchors the tree under `refs/grimoire/baseline/<plan-slug>-phase<N>` (one distinct ref per phase) and stores that ref as the phase's `Baseline`. Diffs are **tree-vs-tree** (`git diff <baseline-tree> <current-tree>`, the current tree snapshotted the same way) so files the run created are included; a bare `git diff <baseline ref>` omits untracked files. Non-mutating, so manual-git and the user's staging are preserved; refs are removed when the plan is archived. Single-phase runs take the same kind of snapshot under a `-run` ref, cleaned up on archive.
-- **Resumable.** A resumed phase re-verifies its already-checked tasks and un-checks any that now fail, so a mid-phase kill never redoes still-passing work.
-- **Per-phase notes.** At completion `/gg` records decisions, gotchas, and surprises in the phase's `Notes`, so rationale survives a compacted session.
-- **Per-phase self-review; deferred distillation.** Self-review runs on each phase's diff. **Distillation runs once, at the end**, from the cumulative baseline diff plus every phase's `Notes`. Archive happens **only when every phase is `done`**; an all-done plan reports complete, a plan with no runnable phase (cycle, unmet or dangling dependency) errors naming the offending phases.
-- **Propose commit(s), never auto-commit.** At each phase (and at the end of a single-phase run) `/gg` proposes a commit message plus copy-pasteable `git add ... && git commit` commands scoped to that run's files (tree-vs-tree, new files included, the plan file excluded), splitting into file-disjoint commits when concerns separate and flagging mixed files for manual `git add -p`. It never runs the commit and never `git add -A` (the manual-git invariant). A final doc-commit covering the archived plan rename and the distilled wiki pages is proposed after distillation.
+Two invariants, everywhere, not just inside `/gg`:
+- **Never auto-commit.** Propose the message plus copy-pasteable `git add ... && git commit` scoped to that run's files. Never run it. Never `git add -A`. The user drives git.
+- **Never auto-write the wiki.** Draft, confirm, then write.
 
-# context-mode, MANDATORY routing rules
+`/gg` owns the mechanics: phase selection, working-tree baselines, tree-vs-tree diffs, resumability, per-phase notes, self-review, deferred distillation, archive. See `prompts/gg.md`, the single source of truth. Do not restate it here.
 
-context-mode MCP tools are available. These rules protect the context window from flooding. One unrouted command can dump 56 KB into context.
+# context-mode, MANDATORY routing
 
-## Think in Code, MANDATORY
+Protects the context window. One unrouted command can dump 56 KB.
 
-When analyzing, counting, filtering, comparing, or processing data, write code via `ctx_execute(language, code)` and `console.log()` only the answer. Do not read raw data into context. Pure JavaScript, Node.js built-ins only (`fs`, `path`, `child_process`). Always use `try/catch` and handle `null`/`undefined`.
+## Think in code, MANDATORY
 
-## BLOCKED, do not use
+Analyzing, counting, filtering, comparing, processing? Write code via `ctx_execute(language, code)` and `console.log()` the answer only. Never read raw data into context. Pure JS, Node built-ins only (`fs`, `path`, `child_process`). Always `try/catch`, handle `null`/`undefined`.
 
-- **curl / wget** in bash, use `ctx_fetch_and_index(url, source)` instead
-- **Inline HTTP** (`node -e "fetch(..."`, `python -c "requests.get(..."`), use `ctx_execute(language, code)`
-- **Direct web fetching**, use `ctx_fetch_and_index(url, source)` then `ctx_search(queries)`
+## BLOCKED
 
-## REDIRECTED, use sandbox
+- `curl` / `wget` -> `ctx_fetch_and_index(url, source)`
+- Inline HTTP (`node -e "fetch(..."`, `python -c "requests.get(..."`) -> `ctx_execute(language, code)`
+- Any direct web fetch -> `ctx_fetch_and_index`, then `ctx_search`
 
-- **bash with >20 lines output**, use `ctx_batch_execute(commands, queries)` or `ctx_execute(language: "shell", code: "...")`
-- **bash** is only for: `git`, `mkdir`, `rm`, `mv`, `cd`, `ls`, `npm install`, `pip install`
-- **read for analysis**, use `ctx_execute_file(path, language, code)`. Use `read` only when you intend to edit the file.
-- **grep / find with large results**, use `ctx_execute(language: "shell", code: "grep ...")`
+## REDIRECTED
+
+The test is **intent and volume**, not a command allowlist.
+
+- **Bash** when *observing* short fixed output (`git status` on a clean tree, `pwd`, a five-line `ls`) or *mutating* state (`git`, `mkdir`, `rm`, `mv`, `cd`, `npm install`, `pip install`).
+- **Sandbox** when *processing* output (filter, count, parse, aggregate) or when it could run past ~20 lines: `ctx_batch_execute(commands, queries)` for several commands, `ctx_execute(language: "shell", code)` for one.
+- `grep` / `find`: targeted hit in bash, wide sweep in the sandbox.
+- Reading to analyze -> `ctx_execute_file(path, language, code)`. Use `read` only when you intend to edit, since Edit needs the exact bytes.
 
 ## Tool selection
 
-0. **On resume**, `ctx_search(sort: "timeline")` first. Check prior context before asking the user anything.
-1. **Gather**, `ctx_batch_execute(commands, queries)`, runs all commands, auto-indexes, returns search results. One call replaces many.
-2. **Follow-up search**, `ctx_search(queries: ["q1", "q2"])`, batch all questions in one call.
-3. **Processing**, `ctx_execute(language, code)` or `ctx_execute_file(path, language, code)`, only stdout enters context.
-4. **Web**, `ctx_fetch_and_index(url, source)` then `ctx_search(queries)`, raw HTML never enters context.
-5. **Index**, `ctx_index(content, source)`, store content in FTS5 for later search.
+0. **Resume** -> `ctx_search(sort: "timeline")` before asking the user anything.
+1. **Gather** -> `ctx_batch_execute(commands, queries)`. Runs all, auto-indexes, returns hits. One call replaces many.
+2. **Follow-up** -> `ctx_search(queries: [...])`. Batch every question into one call.
+3. **Process** -> `ctx_execute` / `ctx_execute_file`. Only stdout enters context.
+4. **Web** -> `ctx_fetch_and_index`, then `ctx_search`. Raw HTML never enters context.
+5. **Store** -> `ctx_index(content, source)`.
 
 ## Parallel I/O
 
-For multi-URL fetches or multi-API calls always pass `concurrency: N` (1-8):
-
-- Use concurrency 4-8 for I/O-bound work (network calls, API queries, gh commands)
-- Keep concurrency 1 for CPU-bound work (npm test, build, lint) or commands sharing state
-- GitHub API: cap at 4
+Always pass `concurrency: N` (1-8) for multi-URL fetches or multi-API calls. 4-8 for I/O-bound work (network, API, `gh`). 1 for CPU-bound (test, build, lint) or shared state. GitHub API caps at 4.
 
 ## Output
 
-Two separate disciplines, do not let the first suppress the second:
+Two disciplines. The first must not suppress the second.
 
-**Context discipline**, keep raw bytes OUT of context. Write artifacts to files, never inline; return the file path and a one-line description. Process data in the sandbox and surface only the result.
+**Context**: raw bytes stay OUT. Artifacts go to files, never inline; return the path plus one line. Process in the sandbox, surface the result.
 
-**Presentation discipline**, format the answer you DO surface; "one-line" means concise, not unstyled:
-- Multi-row or multi-field results → markdown table.
-- Grouped findings → `##` headings + bullets; code, paths, and commands → fenced blocks or backticks.
-- Use **bold** for key terms and inline links; never emit a bare wall of plain text.
+**Presentation**: format what you do surface. Concise is not the same as unstyled. Under *Prose by default*: structure structured content (multi-field results to a table, code/paths/commands in backticks or fences, grouped findings under `##`), plain prose otherwise. **Bold** key terms.
 
-**Never use the `—` (em dash) character** in anything you write: chat output, files, plans, reviews, ADRs, commit messages, PR text, approval messages. Use a comma, colon, parentheses, or a plain hyphen `-` instead, or rephrase the sentence. This is a hard rule with no exceptions.
+## Session continuity
 
-> Agent-specific (Claude Code only, PI ignores): when using the `AskUserQuestion` tool, keep option labels ≤5 words and descriptions ≤1 sentence; never paste raw tool output or snippets into options. The question box is harness-rendered and cannot be themed, so its readability depends entirely on short, clean content.
+Skills, roles, and decisions persist until revoked. Do not drop them as context grows.
 
-## Session Continuity
-
-Skills, roles, and decisions set during a session persist until the user revokes them. Do not drop them as the conversation grows.
-
-On resume, search before asking the user:
-- What did we decide? → `ctx_search(queries: ["decision"], sort: "timeline")`
-- What constraints exist? → `ctx_search(queries: ["constraint"])`
-
-If search returns no results, proceed as a fresh session.
+On resume, search before asking: `ctx_search(queries: ["decision"], sort: "timeline")` and `ctx_search(queries: ["constraint"])`. No results means fresh session.
 
 ## ctx commands
 
-| Command | Action |
-|---------|--------|
-| `ctx stats` | Show context savings and session statistics |
-| `ctx doctor` | Diagnose runtimes, hooks, FTS5, versions |
-| `ctx upgrade` | Update to latest version, rebuild, fix hooks |
-| `ctx purge` | Permanently delete all indexed content |
+`ctx stats` savings and session stats. `ctx doctor` runtimes, hooks, FTS5, versions. `ctx upgrade` update, rebuild, fix hooks. `ctx purge` delete all indexed content, irreversible.
 
-After /clear or /compact: knowledge base is preserved. Use `ctx purge` to start fresh.
+Knowledge base survives /clear and /compact.

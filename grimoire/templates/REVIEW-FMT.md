@@ -1,10 +1,8 @@
 # Review File Format
 
-Review files live in `docs/[group]/[project]/reviews/`. Use file naming:
-- Local/staged: `[date]-[branch-slug]-review-1.md`, `[date]-[branch-slug]-review-2.md`, etc. (counter always included, starts at 1)
-- PR: `[date]-pr-[number]-[title-slug].md` (slug derived from the PR title, lowercase and hyphenated, max 40 chars)
+The review is a **single local working file** at `<repo-root>/grimoire/review.md` (`$RAW_ROOT/review.md`), gitignored and `@`-mentionable. Each run **overwrites** it: no dated filenames, no counters, no accumulation. Only the latest review is kept. For a PR you re-review, GitHub holds the durable record.
 
-Create the `reviews/` directory lazily — only when the first review is saved.
+Create the `grimoire/` directory lazily, only when the first review is saved. When the repo *is* the GRIMOIRE toolkit itself, `$RAW_ROOT` falls back to `$DOCS_ROOT`.
 
 ## Template
 

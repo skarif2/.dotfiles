@@ -11,4 +11,4 @@ Load and follow the `review` skill.
 - `current` → find the open PR for the current branch and review it
 - PR number or URL → full GitHub PR review with CI status, existing comments, linked issues
 
-The skill will save the review to `$GRIMOIRE/docs/[group]/[project]/reviews/` and open it in VS Code.
+The skill will save the review to `<repo-root>/grimoire/review.md`, overwriting the previous run, and open it in VS Code.

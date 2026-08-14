@@ -41,7 +41,7 @@ The target is polymorphic. One target per invocation. Classify `$ARGUMENTS`:
 - **`staged`** → the staged diff: `ctx_execute(shell, "git diff --staged -U3 -- . :(exclude)*lock.json :(exclude)dist/* :(exclude)build/*")`
 - **`local`** or no argument with a dirty/ahead branch → the branch diff vs base: `git diff origin/<base>...HEAD -U3` (detect base as `/review` does)
 - **a PR number or GitHub URL** → fetch the PR diff via `gh` / the GitHub API inside `ctx_execute` (same pattern as the `review` skill's PR mode). If `gh` is unavailable, say "PR targets need `gh` or a token; pass a file, diff, or text target instead" and stop.
-- **a plan filename or a path under `plans/`** → read that plan file from `$DOCS_ROOT/plans/`.
+- **`plan`, or a path to a plan file** → read the repo-local plan at `<repo-root>/grimoire/plan.md` (the one active plan per repo/worktree), or the explicit path if one was given.
 - **any other file path** → read that file.
 - **inline text** → attack the text as given.
 - **empty and nothing to diff** → ask what to attack. There is no useful default.

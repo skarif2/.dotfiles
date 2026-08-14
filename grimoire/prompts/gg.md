@@ -49,7 +49,7 @@ Plan approved. Execute now.
 6. **Self-review the change (reflect).** Before archiving, review your own work once across the same lenses as `/review`, so structural and convention issues get caught here, not by you later. Scope the review to this run's changes via the tree-vs-tree form against the `-run` baseline (see **Propose commit(s) → Scope the run's changes**), so pre-existing dirt and unrelated edits stay out. Adapt depth to the diff: skip for a trivial one-file change, run it for anything non-trivial. See **Self-review (reflect)** below.
 7. When all tasks are complete and the self-review is resolved, first **propose commit(s) for this run** (scope to the `-run` baseline ref, see **Propose commit(s)**; propose-only). Then update plan `**Status:** Done`, clean up the run baseline ref, and **prune the plan file** (full prune, no archive; its durable value is distilled into the wiki in step 8):
    ```bash
-   # Stable slug from the plan title — plan.md's basename is not unique across worktrees (they share one .git)
+   # Stable slug from the plan title (plan.md's basename is not unique across worktrees sharing one .git)
    PLAN_SLUG=$(grep -m1 '^# ' "$PLAN_FILE" | sed 's/^# *//;s/[^A-Za-z0-9 -]//g' | tr '[:upper:] ' '[:lower:]-' | cut -c1-40)
    [ -z "$PLAN_SLUG" ] && PLAN_SLUG="plan"
    for ref in $(git for-each-ref --format='%(refname)' "refs/grimoire/baseline/${PLAN_SLUG}-"*); do
@@ -109,7 +109,7 @@ The final wrap-up step, after distillation and the doc-commit proposal. Both art
    # also a multi-template dir: .github/PULL_REQUEST_TEMPLATE/*.md (prefer default.md, else the first)
    [ -z "$PR_TEMPLATE" ] && PR_TEMPLATE=$(find .github -maxdepth 2 -ipath '*pull_request_template/*.md' 2>/dev/null | sort | head -1)
    ```
-2. **Fill it.** Copy the template **verbatim**, then complete only the prose sections (summary / what changed / why / type of change / test scenarios) from the run's material. **Keep every section and checklist**, tick a checkbox only when you can do so truthfully (e.g. tests added); leave the rest unchecked and leave placeholders (`<ticket>`, PR links, deploy order, screenshots) untouched for the user.
+2. **Fill it.** Copy the template **verbatim**, then complete only the prose sections (summary / what changed / why / type of change / test scenarios) from the run's material. **Write every prose section through the `arif-voice` skill**: the template owns the structure, `arif-voice` owns the wording inside it. **Keep every section and checklist**, tick a checkbox only when you can do so truthfully (e.g. tests added); leave the rest unchecked and leave placeholders (`<ticket>`, PR links, deploy order, screenshots) untouched for the user.
 3. **No template found** → fall back to a minimal structure:
    ```markdown
    ## Summary
@@ -125,10 +125,10 @@ The final wrap-up step, after distillation and the doc-commit proposal. Both art
 
 ### 2. Daily-update message
 
-Also produce a short **daily-update** message (think standup) for the user to paste. Keep it in the **same style as `/review`'s daily update** so the two feel consistent:
+Also produce a short **daily-update** message (think standup) for the user to paste. **Write it through the `arif-voice` skill.** That skill owns how it sounds; the rules below own what goes in it. Same treatment in `/review`, so the two stay consistent.
 
-- **Plain and simple English.** Friendly, direct, no jargon, no section headers, no bullet lists.
 - **Never mention CI, checks, pipelines, or build status.**
+- No section headers, no bullet lists. It is one short paragraph.
 - **Lead with the PR title** (the `pr.md` title just drafted), then say what the PR actually does in **1-2 lines** so a reader who never opened it knows what changed and why. Draw it from the run's cumulative diff and the plan `Goal:`/`Notes:`, not a file-by-file log. Append `(#<num>)` only if a PR number already exists; otherwise omit it.
 
 Present it in its own fenced block, clearly labelled as the thing to paste:
@@ -161,8 +161,8 @@ git diff "$BASE" "$CUR" [-- <file>]              # the run's patch (whole run, o
 ### Build the proposal
 
 1. **Files.** Take the run's changed-file list above. The plan file (`grimoire/plan.md`) is local and **gitignored**, so it never appears in the tree-vs-tree diff or any `git add`, so no special exclusion is needed.
-2. **Subject.** Infer the subject style from recent history (`git log --oneline -10`); if there is no history yet, fall back to a plain imperative subject (e.g. `Add <thing>`). Keep it short.
-3. **Body.** Draw the "why" from the phase's `Notes:` (phased) or the plan `Goal:` (single-phase), plus what changed.
+2. **Subject.** Infer the subject style from recent history (`git log --oneline -10`); if there is no history yet, fall back to a plain imperative subject (e.g. `Add <thing>`). Keep it short. The repo's existing convention wins on **structure** (a `feat(scope):` prefix stays a `feat(scope):` prefix); `arif-voice` governs the **wording** after it.
+3. **Body.** Draw the "why" from the phase's `Notes:` (phased) or the plan `Goal:` (single-phase), plus what changed. **Write the body through the `arif-voice` skill**, it is prose other people read.
 4. **Commands.** Emit copy-pasteable commands for the user to run or edit, do not run them:
    ```bash
    git add <files of this commit>

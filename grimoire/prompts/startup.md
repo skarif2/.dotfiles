@@ -22,6 +22,14 @@ else
   SHARED_ROOT=""
   PROJECT_ID="$PROJ"
 fi
+
+# Raw-source root: plan/review/pr are single LOCAL files so you can @-mention them.
+# Anchored at the git repo/worktree root; falls back to cwd outside a repo.
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+RAW_ROOT="$REPO_ROOT/grimoire"
+# Guard: never read/write raw files inside the GRIMOIRE toolkit itself; fall back to central docs.
+if [ "$RAW_ROOT" -ef "$GRIMOIRE" ] 2>/dev/null; then RAW_ROOT="$DOCS_ROOT"; fi
+
 echo "Project: $PROJECT_ID"
 ```
 
@@ -37,7 +45,7 @@ ctx_batch_execute(
     { label: "Project ADRs", command: "cat $DOCS_ROOT/adr/*.md 2>/dev/null || echo 'none'" },
     { label: "Project gotchas", command: "cat $DOCS_ROOT/gotchas.md 2>/dev/null || echo 'none'" },
     { label: "Available concepts/components", command: "ls $DOCS_ROOT/concepts $DOCS_ROOT/components $DOCS_ROOT/lessons 2>/dev/null || echo 'none'" },
-    { label: "Active plans", command: "ls $DOCS_ROOT/plans/*.md 2>/dev/null || echo 'none'" },
+    { label: "Active plan (local raw file)", command: "head -40 $RAW_ROOT/plan.md 2>/dev/null || echo 'none'" },
     { label: "Pending handoffs", command: "ls $DOCS_ROOT/handoffs/*.md 2>/dev/null || echo 'none'" },
     { label: "Shared index", command: "cat $SHARED_ROOT/index.md 2>/dev/null || echo 'none'" },
     { label: "Shared context", command: "cat $SHARED_ROOT/context/*.md 2>/dev/null || echo 'none'" },
@@ -58,7 +66,7 @@ If `$GROUP` is set (project is inside `~/Projects/`), also search the group-leve
 ctx_search(queries: ["decision", "pattern", "shared"], source: "$GROUP", sort: "timeline")
 ```
 
-## 3. Summarise in 3–5 bullets
+## 3. Summarise in 3 to 5 bullets
 
 Cover what you found: what the `index.md` catalogs (how many concepts/components/lessons exist), domain terms defined, architecture decisions in place, known gotchas, and active plan/handoff filenames. List plan and handoff filenames, don't load their content. If `index.md` is missing or empty, note it, the project hasn't been distilled yet.
 

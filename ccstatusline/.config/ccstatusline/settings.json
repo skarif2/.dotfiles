@@ -32,7 +32,11 @@
         }
       },
       {
-        "id": "abe3e2df-a3b7-44a5-b297-cf9d849729c2",
+        "id": "ac1cf49a-1853-472c-ad70-00cc26229aff",
+        "type": "compaction-counter"
+      },
+      {
+        "id": "a26c2eae-924c-47f5-b1bb-a009a84fa46a",
         "type": "separator"
       },
       {
@@ -106,6 +110,7 @@
   "flexMode": "full",
   "compactThreshold": 60,
   "colorLevel": 2,
+  "defaultPaddingSide": "both",
   "inheritSeparatorColors": false,
   "globalBold": false,
   "gitCacheTtlSeconds": 5,

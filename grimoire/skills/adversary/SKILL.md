@@ -15,6 +15,7 @@ Read-only always. You report findings. The user decides what to fix.
 Detect the project (used only to load knowledge on demand and to resolve plan-file targets). See `$GRIMOIRE/templates/PROJECT-INIT.md`.
 
 ```bash
+: "${GRIMOIRE:?GRIMOIRE is unset; export it in ~/.zshenv. Never go looking for it: a home-wide find walks Desktop, Documents and the Photos library, and macOS prompts for each.}"
 PROJECTS_ROOT="$HOME/Projects"
 CWD=$(pwd)
 if [[ "$CWD" == "$PROJECTS_ROOT/"* ]]; then

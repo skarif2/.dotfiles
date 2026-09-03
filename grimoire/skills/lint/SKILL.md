@@ -24,6 +24,7 @@ One sandbox pass, read-only, only the report enters context:
 ctx_execute("javascript", `
   const fs=require('fs'), path=require('path');
   const G=process.env.GRIMOIRE;
+  if(!G) throw new Error('GRIMOIRE is unset; export it in ~/.zshenv. Do not search for it.');
   const home=process.env.HOME;
   const EM=String.fromCharCode(0x2014);   // em dash, by code so this file is not self-flagged
   const BT=String.fromCharCode(96);        // backtick

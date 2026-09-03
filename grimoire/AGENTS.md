@@ -125,6 +125,7 @@ Analyzing, counting, filtering, comparing, processing? Write code via `ctx_execu
 - `curl` / `wget` -> `ctx_fetch_and_index(url, source)`
 - Inline HTTP (`node -e "fetch(..."`, `python -c "requests.get(..."`) -> `ctx_execute(language, code)`
 - Any direct web fetch -> `ctx_fetch_and_index`, then `ctx_search`
+- Walking `$HOME` or `/` (`find $HOME`, `rg ~`, a `~/**` glob) -> search a known root, or `-prune` the protected folders. Desktop, Documents, Downloads, Music, Pictures, Movies and other apps' containers each raise a macOS permission dialog attributed to the *host app*, and `2>/dev/null` hides the error but not the dialog.
 
 ## REDIRECTED
 

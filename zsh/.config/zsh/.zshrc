@@ -189,10 +189,8 @@ export PATH="$JAVA_HOME/bin:$PATH"
 export GITHUB_PERSONAL_ACCESS_TOKEN=$(security find-generic-password -a "$USER" -s "github-mcp-token" -w 2>/dev/null)
 export CONTEXT7_API_KEY=$(security find-generic-password -a "$USER" -s "context7-api-key" -w 2>/dev/null)
 
-# GRIMOIRE (AI Knowledge Base)
-export GRIMOIRE="$HOME/.dotfiles/grimoire"
-# Context Mode MCP server custom path
-export CONTEXT_MODE_DIR="$GRIMOIRE/.context-mode"
+# GRIMOIRE and CONTEXT_MODE_DIR live in ~/.zshenv: agent sandboxes run
+# non-interactive shells, which never source this file.
 
 # Hermes Agent — ensure ~/.local/bin is on PATH
 export PATH="$HOME/.local/bin:$PATH"

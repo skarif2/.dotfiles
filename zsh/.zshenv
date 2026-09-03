@@ -46,3 +46,9 @@ export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 
 # AWS profile
 export AWS_PROFILE=arif
+
+# GRIMOIRE (AI knowledge base). Here rather than .zshrc because agent sandboxes
+# run non-interactive shells, which never source .zshrc; an empty $GRIMOIRE
+# sends the skills hunting for the vault with a home-wide find.
+export GRIMOIRE="$HOME/.dotfiles/grimoire"
+export CONTEXT_MODE_DIR="$GRIMOIRE/.context-mode"

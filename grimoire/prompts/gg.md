@@ -10,6 +10,7 @@ Plan approved. Execute now.
 
 1. Detect the project path (see `$GRIMOIRE/templates/PROJECT-INIT.md` for the full spec):
    ```bash
+   : "${GRIMOIRE:?GRIMOIRE is unset; export it in ~/.zshenv. Never go looking for it: a home-wide find walks Desktop, Documents and the Photos library, and macOS prompts for each.}"
    PROJECTS_ROOT="$HOME/Projects"
    CWD=$(pwd)
    if [[ "$CWD" == "$PROJECTS_ROOT/"* ]]; then

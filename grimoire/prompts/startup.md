@@ -7,6 +7,7 @@ Before starting work, identify the current project and load what's known about i
 ## 1. Detect project
 
 ```bash
+: "${GRIMOIRE:?GRIMOIRE is unset; export it in ~/.zshenv. Never go looking for it: a home-wide find walks Desktop, Documents and the Photos library, and macOS prompts for each.}"
 PROJECTS_ROOT="$HOME/Projects"
 CWD=$(pwd)
 if [[ "$CWD" == "$PROJECTS_ROOT/"* ]]; then

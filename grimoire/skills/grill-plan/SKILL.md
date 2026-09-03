@@ -14,6 +14,7 @@ Before writing any plan, run a focused interview to understand the task properly
 Detect the project path from the folder structure. See `$GRIMOIRE/templates/PROJECT-INIT.md` for the full spec.
 
 ```bash
+: "${GRIMOIRE:?GRIMOIRE is unset; export it in ~/.zshenv. Never go looking for it: a home-wide find walks Desktop, Documents and the Photos library, and macOS prompts for each.}"
 PROJECTS_ROOT="$HOME/Projects"
 CWD=$(pwd)
 if [[ "$CWD" == "$PROJECTS_ROOT/"* ]]; then

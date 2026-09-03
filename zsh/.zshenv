@@ -43,3 +43,6 @@ export EDITOR="nvim"
 # Starship Configuration Path
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 . "$HOME/.cargo/env"
+
+# AWS profile
+export AWS_PROFILE=arif
